@@ -6,6 +6,9 @@ namespace RPN {
     public class RPNStack {
         public int ColumnWidth { get; init; }
 
+        public string ErrorFunction { get; internal set; } = "";
+        public string ErrorMessage { get; internal set; } = "";
+
         private readonly Stack<string> stack;
         private readonly List<Function> functions;
 
@@ -44,8 +47,15 @@ namespace RPN {
             return isFunction;
         }
 
+        public void ResetErrorState() {
+            ErrorFunction = "";
+            ErrorMessage = "";
+        }
+
         public bool Push(string obj) {
             bool isFunction = false;
+
+            ResetErrorState();
 
             if(obj != "") {
                 stack.Push(obj);
@@ -53,7 +63,11 @@ namespace RPN {
                 functions.ForEach(f => {
                     if(f.Symbols.Contains(obj)) {
                         stack.Pop();
-                        f.Execute(stack);
+                        if(!f.Execute(stack)) {
+                            ErrorFunction = f.ErrorFunction;
+                            ErrorMessage = f.ErrorMessage;
+                            return;
+                        }
                         isFunction = true;
                         return;
                     }

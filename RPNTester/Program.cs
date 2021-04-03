@@ -4,6 +4,8 @@ using System;
 namespace RPNTester {
     public class Program {
         private static readonly RPNStack rpn = new();
+        private static int cw1 = rpn.ColumnWidth;
+        private static int cw2 = cw1 - 1;
 
         public static void Main(string[] args) {
             Console.CursorVisible = false;
@@ -11,18 +13,13 @@ namespace RPNTester {
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Clear();
-            Console.BackgroundColor = ConsoleColor.DarkGray;
+            Console.BackgroundColor = ConsoleColor.DarkBlue;
             Console.ForegroundColor = ConsoleColor.White;
 
-            int cw1 = rpn.ColumnWidth;
-            int cw2 = cw1 - 1;
-            int maxStack = 8;
+            int maxStack = 4;
 
             while(true) {
-                Console.SetCursorPosition(0, 0);
-                Console.WriteLine($"{"".PadRight(cw1)}"); // Error Function (not implemented)
-                Console.WriteLine($"{"".PadRight(cw1)}"); // Error Description (not implemented)
-                rpn.PrintStack(maxStack);
+                Refresh(maxStack);
 
                 string newEntry = "";
                 while(true) {
@@ -41,10 +38,8 @@ namespace RPNTester {
 
                     newEntry += k.KeyChar;
 
-                    Console.SetCursorPosition(0, 0);
-                    Console.WriteLine(""); // Error Function
-                    Console.WriteLine(""); // Error Description
-                    rpn.PrintStack(maxStack - 1);
+                    rpn.ResetErrorState();
+                    Refresh(maxStack - 1);
 
                     string tmp = newEntry.Length < cw1 ? newEntry : "…" + newEntry.Substring(newEntry.Length - cw2 + 1);
                     Console.WriteLine($"{tmp}◄{"".PadRight(cw2 - tmp.Length)}");
@@ -69,6 +64,13 @@ namespace RPNTester {
             //PushAndPrint("√");
 
             Console.CursorVisible = true;
+        }
+
+        private static void Refresh(int maxStack) {
+            Console.SetCursorPosition(0, 0);
+            Console.WriteLine(rpn.ErrorFunction.PadRight(cw1));
+            Console.WriteLine(rpn.ErrorMessage.PadRight(cw1));
+            rpn.PrintStack(maxStack);
         }
 
         public static void PushAndPrint(string value) {
