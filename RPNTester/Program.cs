@@ -4,15 +4,11 @@ using System;
 namespace RPNTester {
     public class Program {
         private static readonly RPNStack rpn = new();
-        private static int cw1 = rpn.ColumnWidth;
-        private static int cw2 = cw1 - 1;
+        private static readonly int cw1 = rpn.ColumnWidth;
+        private static readonly int cw2 = cw1 - 1;
 
         public static void Main(string[] args) {
-            Console.CursorVisible = false;
-
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.Clear();
+            Clear(false);
             Console.BackgroundColor = ConsoleColor.DarkBlue;
             Console.ForegroundColor = ConsoleColor.White;
 
@@ -28,42 +24,37 @@ namespace RPNTester {
                         rpn.Push(newEntry);
                         break;
                     }
-                    if(k.Key == ConsoleKey.Escape) return;
-
+                    if((k.Key == ConsoleKey.Delete) && (newEntry == "")) {
+                        rpn.Push("DROP");
+                        break;
+                    }
+                    if(k.Key == ConsoleKey.Escape) {
+                        Clear(true);
+                        return;
+                    }
                     if(rpn.IsFunction(k.KeyChar.ToString())) {
                         rpn.Push(newEntry);
                         rpn.Push(k.KeyChar.ToString());
                         break;
                     }
 
-                    newEntry += k.KeyChar;
+                    if(char.IsLetterOrDigit(k.KeyChar) || char.IsSymbol(k.KeyChar) || char.IsPunctuation(k.KeyChar))
+                        newEntry += k.KeyChar;
 
                     rpn.ResetErrorState();
                     Refresh(maxStack - 1);
 
-                    string tmp = newEntry.Length < cw1 ? newEntry : "…" + newEntry.Substring(newEntry.Length - cw2 + 1);
+                    string tmp = newEntry.Length < cw1 ? newEntry : "…" + newEntry[(newEntry.Length - cw2 + 1)..];
                     Console.WriteLine($"{tmp}◄{"".PadRight(cw2 - tmp.Length)}");
                 }
             }
+        }
 
-            //PushAndPrint("5");
-            //PushAndPrint("3");
-            //PushAndPrint("2");
-            //PushAndPrint("-");
-            //PushAndPrint("-");
-            //PushAndPrint("6");
-            //PushAndPrint("+");
-
-            //PushAndPrint("3");
-            //PushAndPrint("2");
-            //PushAndPrint("SWAP");
-            //PushAndPrint("/");
-            //PushAndPrint("*");
-
-            //PushAndPrint("SQRT");
-            //PushAndPrint("√");
-
-            Console.CursorVisible = true;
+        private static void Clear(bool cursorVisible) {
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Clear();
+            Console.CursorVisible = cursorVisible;
         }
 
         private static void Refresh(int maxStack) {
@@ -71,14 +62,6 @@ namespace RPNTester {
             Console.WriteLine(rpn.ErrorFunction.PadRight(cw1));
             Console.WriteLine(rpn.ErrorMessage.PadRight(cw1));
             rpn.PrintStack(maxStack);
-        }
-
-        public static void PushAndPrint(string value) {
-            Console.SetCursorPosition(0, 0);
-            rpn.Push(value);
-            rpn.PrintStack();
-            Console.WriteLine($"\nInput: {value,-20}");
-            Console.ReadKey(true);
         }
     }
 }

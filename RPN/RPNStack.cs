@@ -22,13 +22,13 @@ namespace RPN {
             string[] stk = new string[max];
             string tmp;
             string idx;
-            Array.Copy(stack.ToArray(), stk, stack.Count);
+            Array.Copy(stack.ToArray(), 0, stk, 0, Math.Min(max, stack.Count));
             for(int i = max - 1; i >= 0; i--) {
                 idx = (i + 1).ToString();
                 tmp = stk[i] ?? "";
                 tmp = tmp.Length <= ColumnWidth ?
                         tmp :
-                        "…" + stk[i].Substring(stk[i].Length - ColumnWidth + idx.Length + 2);
+                        "…" + stk[i][(stk[i].Length - ColumnWidth + idx.Length + 2)..];
                 Console.Write($"{tmp.PadLeft(ColumnWidth)}");
                 Console.CursorLeft = 0;
                 Console.WriteLine(idx + ":");
@@ -54,24 +54,35 @@ namespace RPN {
 
         public bool Push(string obj) {
             bool isFunction = false;
+            bool hasErrors = false;
 
             ResetErrorState();
 
             if(obj != "") {
-                stack.Push(obj);
-
                 functions.ForEach(f => {
                     if(f.Symbols.Contains(obj)) {
-                        stack.Pop();
                         if(!f.Execute(stack)) {
+                            // FIXME: This error handling sucks. There must be a better way.
                             ErrorFunction = f.ErrorFunction;
                             ErrorMessage = f.ErrorMessage;
+                            hasErrors = true;
                             return;
                         }
                         isFunction = true;
                         return;
                     }
                 });
+
+                if(!isFunction && !hasErrors) {
+                    try {
+                        double tmp = double.Parse(obj);
+                        stack.Push(obj);
+                    } catch { // FIXME: If it fails then it must be a string.
+                              // Of course, this will require a more robust parsing algorithm if we want
+                              // to support more object types, besides numbers and strings.
+                        stack.Push($"'{obj}'");
+                    }
+                }
             }
 
             return isFunction;
