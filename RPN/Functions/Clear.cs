@@ -4,7 +4,7 @@ namespace RPN {
     [RPNFunctionAttr(nameof(Clear))]
     public class Clear : Function {
         public Clear() {
-            base.ArgumentCount = 1;
+            base.ArgumentCount = 0;
             base.Symbols = new string[] { nameof(Clear).ToUpper() };
         }
 

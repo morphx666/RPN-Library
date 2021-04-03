@@ -21,7 +21,11 @@ namespace RPNTester {
                 while(true) {
                     ConsoleKeyInfo k = Console.ReadKey(true);
                     if(k.Key == ConsoleKey.Enter) {
-                        rpn.Push(newEntry);
+                        if(newEntry == "") {
+                            rpn.Push("DUP");
+                        } else {
+                            rpn.Push(newEntry);
+                        }
                         break;
                     }
                     if((k.Key == ConsoleKey.Delete) && (newEntry == "")) {
