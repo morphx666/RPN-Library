@@ -8,14 +8,14 @@ namespace RPNTester {
         private static readonly int cw2 = cw1 - 1;
 
         public static void Main(string[] args) {
-            Clear(false);
+            ClearScreen(false);
             Console.BackgroundColor = ConsoleColor.DarkBlue;
             Console.ForegroundColor = ConsoleColor.White;
 
             int maxStack = 4;
 
             while(true) {
-                Refresh(maxStack);
+                RefreshScreen(maxStack);
 
                 string newEntry = "";
                 while(true) {
@@ -28,8 +28,11 @@ namespace RPNTester {
                         rpn.Push("DROP");
                         break;
                     }
+                    if((k.Key == ConsoleKey.Backspace)) {
+                        newEntry = newEntry[0..^1];
+                    }
                     if(k.Key == ConsoleKey.Escape) {
-                        Clear(true);
+                        ClearScreen(true);
                         return;
                     }
                     if(rpn.IsFunction(k.KeyChar.ToString())) {
@@ -38,11 +41,12 @@ namespace RPNTester {
                         break;
                     }
 
-                    if(char.IsLetterOrDigit(k.KeyChar) || char.IsSymbol(k.KeyChar) || char.IsPunctuation(k.KeyChar))
+                    if(char.IsLetterOrDigit(k.KeyChar) || char.IsSymbol(k.KeyChar) || char.IsPunctuation(k.KeyChar)) {
                         newEntry += k.KeyChar;
+                    }
 
                     rpn.ResetErrorState();
-                    Refresh(maxStack - 1);
+                    RefreshScreen(maxStack - 1);
 
                     string tmp = newEntry.Length < cw1 ? newEntry : "…" + newEntry[(newEntry.Length - cw2 + 1)..];
                     Console.WriteLine($"{tmp}◄{"".PadRight(cw2 - tmp.Length)}");
@@ -50,14 +54,14 @@ namespace RPNTester {
             }
         }
 
-        private static void Clear(bool cursorVisible) {
+        private static void ClearScreen(bool cursorVisible) {
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Clear();
             Console.CursorVisible = cursorVisible;
         }
 
-        private static void Refresh(int maxStack) {
+        private static void RefreshScreen(int maxStack) {
             Console.SetCursorPosition(0, 0);
             Console.WriteLine(rpn.ErrorFunction.PadRight(cw1));
             Console.WriteLine(rpn.ErrorMessage.PadRight(cw1));
