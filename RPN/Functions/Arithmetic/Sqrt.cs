@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace RPN {
+namespace RPN.Functions.Arithmetic {
     [RPNFunctionAttr(nameof(Sqrt))]
     public class Sqrt : Function {
         public Sqrt() {
@@ -11,8 +11,7 @@ namespace RPN {
 
         public override void ExecuteInternal(Stack<string> stack) {
             double v1 = double.Parse(stack.Pop());
-            v1 = Math.Sqrt(v1);
-            stack.Push(v1.ToString());
+            stack.Push(Math.Sqrt(v1).ToString());
         }
     }
 }

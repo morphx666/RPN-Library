@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace RPN {
+namespace RPN.Functions.Arithmetic {
     [RPNFunctionAttr(nameof(Add))]
     public class Add : Function {
         public Add() {

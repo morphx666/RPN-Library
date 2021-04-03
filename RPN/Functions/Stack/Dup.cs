@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RPN {
+namespace RPN.Functions.Stack {
     [RPNFunctionAttr(nameof(Dup))]
     public class Dup : Function {
         public Dup() {

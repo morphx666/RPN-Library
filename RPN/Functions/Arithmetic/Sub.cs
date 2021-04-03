@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RPN {
+namespace RPN.Functions.Arithmetic {
     [RPNFunctionAttr(nameof(Sub))]
     public class Sub : Function {
         public Sub() {

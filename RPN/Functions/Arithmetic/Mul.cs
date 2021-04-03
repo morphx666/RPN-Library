@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RPN {
+namespace RPN.Functions.Arithmetic {
     [RPNFunctionAttr(nameof(Mul))]
     public class Mul : Function {
         public Mul() {

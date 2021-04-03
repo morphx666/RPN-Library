@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RPN {
+namespace RPN.Functions.Arithmetic {
     [RPNFunctionAttr(nameof(Div))]
     public class Div : Function {
         public Div() {

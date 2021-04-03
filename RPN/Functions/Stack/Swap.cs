@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RPN {
+namespace RPN.Functions.Stack {
     [RPNFunctionAttr(nameof(Swap))]
     public class Swap : Function {
         public Swap() {

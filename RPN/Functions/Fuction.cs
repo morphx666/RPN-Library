@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace RPN {
+namespace RPN.Functions {
     public abstract class Function {
         public string ErrorFunction { get; internal set; } = "";
         public string ErrorMessage { get; internal set; } = "";

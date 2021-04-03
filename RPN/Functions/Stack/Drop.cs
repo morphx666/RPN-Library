@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RPN {
+namespace RPN.Functions.Stack {
     [RPNFunctionAttr(nameof(Drop))]
     public class Drop : Function {
         public Drop() {
