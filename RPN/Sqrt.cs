@@ -9,15 +9,10 @@ namespace RPN {
             base.Symbols = new string[] { nameof(Sqrt).ToUpper(), "√" };
         }
 
-        public override bool Execute(Stack<string> stack) {
-            try {
-                double v1 = double.Parse(stack.Pop());
-                v1 = Math.Sqrt(v1);
-                stack.Push(v1.ToString());
-                return true;
-            } catch {
-                return false;
-            }
+        public override void ExecuteInternal(Stack<string> stack) {
+            double v1 = double.Parse(stack.Pop());
+            v1 = Math.Sqrt(v1);
+            stack.Push(v1.ToString());
         }
     }
 }

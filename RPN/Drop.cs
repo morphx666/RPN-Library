@@ -8,13 +8,8 @@ namespace RPN {
             base.Symbols = new string[] { nameof(Drop).ToUpper() };
         }
 
-        public override bool Execute(Stack<string> stack) {
-            try {
-                stack.Pop();
-                return true;
-            } catch {
-                return false;
-            }
+        public override void ExecuteInternal(Stack<string> stack) {
+            stack.Pop();
         }
     }
 }

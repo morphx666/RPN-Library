@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <AssemblyVersion>2021.4.3.40</AssemblyVersion>
-    <FileVersion>2021.4.3.40</FileVersion>
+    <AssemblyVersion>2021.4.3.41</AssemblyVersion>
+    <FileVersion>2021.4.3.41</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -8,15 +8,10 @@ namespace RPN {
             base.Symbols = new string[] { "*", "×" };
         }
 
-        public override bool Execute(Stack<string> stack) {
-            try {
-                double v1 = double.Parse(stack.Pop());
-                double v2 = double.Parse(stack.Pop());
-                stack.Push((v2 * v1).ToString());
-                return true;
-            } catch {
-                return false;
-            }
+        public override void ExecuteInternal(Stack<string> stack) {
+            double v1 = double.Parse(stack.Pop());
+            double v2 = double.Parse(stack.Pop());
+            stack.Push((v2 * v1).ToString());
         }
     }
 }
