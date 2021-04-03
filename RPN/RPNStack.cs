@@ -74,6 +74,7 @@ namespace RPN {
                 });
 
                 if(!isFunction && !hasErrors) {
+                    obj = obj.Replace("'", "");
                     try {
                         double tmp = double.Parse(obj);
                         stack.Push(obj);

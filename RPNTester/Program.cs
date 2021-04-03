@@ -17,9 +17,13 @@ namespace RPNTester {
             while(true) {
                 RefreshScreen(maxStack);
 
+                bool stringMode = false;
                 string newEntry = "";
                 while(true) {
                     ConsoleKeyInfo k = Console.ReadKey(true);
+                    if(k.Key == ConsoleKey.Oem7) {
+                        stringMode = !stringMode;
+                    }
                     if(k.Key == ConsoleKey.Enter) {
                         if(newEntry == "") {
                             rpn.Push("DUP");
@@ -28,18 +32,21 @@ namespace RPNTester {
                         }
                         break;
                     }
-                    if((k.Key == ConsoleKey.Delete) && (newEntry == "")) {
-                        rpn.Push("DROP");
-                        break;
-                    }
                     if((k.Key == ConsoleKey.Backspace)) {
-                        newEntry = newEntry[0..^1];
+                        if(newEntry == "") {
+                            rpn.Push("DROP");
+                            break;
+                        } else {
+                            newEntry = newEntry[0..^1];
+                            if(newEntry == "") break; // I personally don't like this behavior,
+                                                      // but that's how the HP48 behaves.
+                        }
                     }
                     if(k.Key == ConsoleKey.Escape) {
                         ClearScreen(true);
                         return;
                     }
-                    if(rpn.IsFunction(k.KeyChar.ToString())) {
+                    if(!stringMode && rpn.IsFunction(k.KeyChar.ToString())) {
                         rpn.Push(newEntry);
                         rpn.Push(k.KeyChar.ToString());
                         break;
