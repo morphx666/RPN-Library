@@ -1,7 +1,8 @@
-﻿using RPN.Functions;
+﻿using RPN.OpCodes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static RPN.OpCodes.OpCode;
 
 namespace RPN {
     public class RPNStack {
@@ -11,11 +12,11 @@ namespace RPN {
         public string ErrorMessage { get; internal set; } = "";
 
         private readonly Stack<string> stack;
-        private readonly List<Function> functions;
+        private readonly List<OpCode> functions;
 
         public RPNStack(int columnWidth = 22) {
             stack = new();
-            functions = Function.GetAvailableFunctions();
+            functions = OpCode.GetAvailableFunctions();
             this.ColumnWidth = columnWidth;
         }
 
@@ -84,14 +85,21 @@ namespace RPN {
                 });
 
                 if(!isFunction && !hasErrors) {
-                    token = token.Replace("'", "");
-                    try {
-                        double tmp = double.Parse(token);
-                        stack.Push(token);
-                    } catch { // FIXME: If it fails then it must be a string.
-                              // Of course, this will require a more robust parsing algorithm if we want
-                              // to support more object types, besides numbers and strings.
-                        stack.Push($"'{token}'");
+                    Types dataType = RPN.OpCodes.OpCode.InferType(token);
+                    if((dataType & Types.String) == Types.String) {
+                        stack.Push($"\"{token.Replace("\"", "")}\"");
+                    } else if(((dataType & Types.String) == Types.String) ||
+                       ((dataType & Types.Formula) == Types.Formula)) {
+                        stack.Push($"'{token.Replace("'", "")}'");
+                    } else {
+                        try {
+                            double tmp = double.Parse(token);
+                            stack.Push(token);
+                        } catch { // FIXME: If it fails then it must be a string.
+                                  // Of course, this will require a more robust parsing algorithm if we want
+                                  // to support more object types, besides numbers and strings.
+                            stack.Push($"'{token}'");
+                        }
                     }
                 }
             }
