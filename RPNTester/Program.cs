@@ -21,7 +21,7 @@ namespace RPNTester {
                 string newEntry = "";
                 while(true) {
                     ConsoleKeyInfo k = Console.ReadKey(true);
-                    if(k.Key == ConsoleKey.Oem7) {
+                    if(k.Key == ConsoleKey.Oem7) { // '
                         stringMode = !stringMode;
                     }
                     if(k.Key == ConsoleKey.Enter) {
@@ -52,7 +52,10 @@ namespace RPNTester {
                         break;
                     }
 
-                    if(char.IsLetterOrDigit(k.KeyChar) || char.IsSymbol(k.KeyChar) || char.IsPunctuation(k.KeyChar)) {
+                    if(char.IsWhiteSpace(k.KeyChar) || 
+                       char.IsLetterOrDigit(k.KeyChar) || 
+                       char.IsSymbol(k.KeyChar) || 
+                       char.IsPunctuation(k.KeyChar)) {
                         newEntry += k.KeyChar;
                     }
 

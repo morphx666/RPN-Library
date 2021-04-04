@@ -55,9 +55,18 @@ namespace RPN {
 
         public bool Push(string obj) {
             bool isFunction = false;
-            bool hasErrors = false;
 
             ResetErrorState();
+
+            foreach(string token in obj.Split(' ')) {
+                isFunction |= ParseToken(token);
+            }
+            return isFunction;
+        }
+
+        private bool ParseToken(string obj) {
+            bool isFunction = false;
+            bool hasErrors = false;
 
             if(obj != "") {
                 functions.ForEach(f => {
