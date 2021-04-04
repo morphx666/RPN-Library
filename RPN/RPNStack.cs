@@ -64,13 +64,13 @@ namespace RPN {
             return isFunction;
         }
 
-        private bool ParseToken(string obj) {
+        private bool ParseToken(string token) {
             bool isFunction = false;
             bool hasErrors = false;
 
-            if(obj != "") {
+            if(token != "") {
                 functions.ForEach(f => {
-                    if(f.Symbols.Contains(obj)) {
+                    if(f.Symbols.Contains(token)) {
                         if(!f.Execute(stack)) {
                             // FIXME: This error handling sucks. There must be a better way.
                             ErrorFunction = f.ErrorFunction;
@@ -84,14 +84,14 @@ namespace RPN {
                 });
 
                 if(!isFunction && !hasErrors) {
-                    obj = obj.Replace("'", "");
+                    token = token.Replace("'", "");
                     try {
-                        double tmp = double.Parse(obj);
-                        stack.Push(obj);
+                        double tmp = double.Parse(token);
+                        stack.Push(token);
                     } catch { // FIXME: If it fails then it must be a string.
                               // Of course, this will require a more robust parsing algorithm if we want
                               // to support more object types, besides numbers and strings.
-                        stack.Push($"'{obj}'");
+                        stack.Push($"'{token}'");
                     }
                 }
             }

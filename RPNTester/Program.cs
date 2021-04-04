@@ -21,10 +21,13 @@ namespace RPNTester {
                 string newEntry = "";
                 while(true) {
                     ConsoleKeyInfo k = Console.ReadKey(true);
-                    if(k.Key == ConsoleKey.Oem7) { // '
+                    ConsoleKey key = k.Key;
+
+                    if(key == ConsoleKey.Oem7) { // '
                         stringMode = !stringMode;
                     }
-                    if(k.Key == ConsoleKey.Enter) {
+
+                    if(key == ConsoleKey.Enter) {
                         if(newEntry == "") {
                             rpn.Push("DUP");
                         } else {
@@ -32,7 +35,8 @@ namespace RPNTester {
                         }
                         break;
                     }
-                    if((k.Key == ConsoleKey.Backspace)) {
+
+                    if(key == ConsoleKey.Backspace) {
                         if(newEntry == "") {
                             rpn.Push("DROP");
                             break;
@@ -42,28 +46,32 @@ namespace RPNTester {
                                                       // but that's how the HP48 behaves.
                         }
                     }
-                    if(k.Key == ConsoleKey.Escape) {
+
+                    if(key == ConsoleKey.Escape) {
                         ClearScreen(true);
                         return;
                     }
-                    if(!stringMode && rpn.IsFunction(k.KeyChar.ToString())) {
+
+                    char kc = k.KeyChar;
+                    string kcs = kc.ToString();
+                    if(!stringMode && rpn.IsFunction(kcs)) {
                         rpn.Push(newEntry);
-                        rpn.Push(k.KeyChar.ToString());
+                        rpn.Push(kcs);
                         break;
                     }
 
-                    if(char.IsWhiteSpace(k.KeyChar) || 
-                       char.IsLetterOrDigit(k.KeyChar) || 
-                       char.IsSymbol(k.KeyChar) || 
-                       char.IsPunctuation(k.KeyChar)) {
-                        newEntry += k.KeyChar;
+                    if(char.IsLetterOrDigit(kc) || 
+                       char.IsSymbol(kc) || 
+                       char.IsPunctuation(kc) ||
+                       char.IsWhiteSpace(kc)) {
+                        newEntry += kcs;
                     }
 
                     rpn.ResetErrorState();
                     RefreshScreen(maxStack - 1);
 
-                    string tmp = newEntry.Length < cw1 ? newEntry : "…" + newEntry[(newEntry.Length - cw2 + 1)..];
-                    Console.WriteLine($"{tmp}◄{"".PadRight(cw2 - tmp.Length)}");
+                    string edl = newEntry.Length < cw1 ? newEntry : "…" + newEntry[(newEntry.Length - cw2 + 1)..];
+                    Console.WriteLine($"{edl}◄{"".PadRight(cw2 - edl.Length)}");
                 }
             }
         }

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace RPN.Functions.Arithmetic {
+namespace RPN.Functions.Probability {
     [RPNFunctionAttr(nameof(Fact))]
     public class Fact : Function {
         public Fact() {
