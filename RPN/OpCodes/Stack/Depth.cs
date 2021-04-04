@@ -4,13 +4,11 @@ namespace RPN.OpCodes.Stack {
     [OpCodeAttr(nameof(Depth))]
     public class Depth : OpCode {
         public Depth() {
-            base.ArgumentCount = 0;
-            base.Symbols = new string[] { nameof(Depth).ToUpper() };
-            base.DataTypes = new Types[] { Types.Any };
+            Symbols = new string[] { nameof(Depth).ToUpper() };
         }
 
-        public override void ExecuteInternal(Stack<string> stack, Types dataType) {
-            stack.Push(stack.Count.ToString());
+        public override void ExecuteInternal(RPNStack rpn, Types dataType) {
+            rpn.Push(rpn.Count.ToString());
         }
     }
 }

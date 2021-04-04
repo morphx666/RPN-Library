@@ -14,43 +14,54 @@ namespace RPN.OpCodes {
             Real = Integer | Float,
             Number = Real | Complex,
 
-            Formula = 8,
+            Infix = 8,
 
             String = 16,
 
-            Any = 31
+            OpCode = 32,
+
+            Any = 63
+        }
+
+        public enum Associativities {
+            Left,
+            Right
         }
 
         public string ErrorFunction { get; internal set; } = "";
         public string ErrorMessage { get; internal set; } = "";
-        public int ArgumentCount { get; init; }
+        public int ArgumentCount { get; init; } = 0;
         public string[] Symbols { get; init; }
-        public Types[] DataTypes { get; init; }
-        public abstract void ExecuteInternal(Stack<string> stack, Types dataType);
+        public Types[] DataTypes { get; init; } = { Types.Any };
+        public Associativities Associativity { get; init; }
+        public int Precedence { get; init; } = 10;
+        public abstract void ExecuteInternal(RPNStack rpn, Types dataType);
 
-        public bool Execute(Stack<string> stack) {
+        public bool Execute(RPNStack rpn) {
             try {
-                if(stack.Count < ArgumentCount) {
+                if(rpn.Count < ArgumentCount) {
                     throw new Exception($"Too Few Arguments");
                 }
 
                 int dataType = 0;
                 if(ArgumentCount > 0) {
                     string[] tokens = new string[ArgumentCount];
-                    Array.Copy(stack.ToArray(), 0, tokens, 0, ArgumentCount);
+                    Array.Copy(rpn.ToArray(), 0, tokens, 0, ArgumentCount);
 
                     for(int i = 0; i < tokens.Length; i++) {
                         for(int j = 0; j < DataTypes.Length; j++) {
-                            if((int)(InferType(tokens[i]) & DataTypes[j]) != 0) {
+                            if((InferType(tokens[i]) & DataTypes[j]) != 0) {
                                 dataType = Math.Max((int)dataType, (int)DataTypes[j]);
                             }
                         }
                     }
 
-                    if(dataType == 0) throw new Exception("Bad argument type");
+                    if(dataType == 0) {
+                        throw new Exception("Bad Argument Type");
+                    }
                 }
 
-                ExecuteInternal(stack, (Types)dataType);
+                ExecuteInternal(rpn, (Types)dataType);
                 return true;
             } catch(Exception ex) {  // FIXME: This is kind of pointless.
                                      // We should be able to handle errors such as:
@@ -68,26 +79,31 @@ namespace RPN.OpCodes {
             if(double.TryParse(token, out double v)) {
                 if(Math.Floor(v) == v) return Types.Integer;
                 return Types.Float;
-            } else if(token.StartsWith('(')) {
+            } else if(token.StartsWith('(') && token.Contains(',')) {
                 return Types.Complex;
             } else if(token.StartsWith('"')) {
                 return Types.String;
             } else
-                return Types.Formula;
+                return Types.Infix;
         }
 
-        public static List<OpCode> GetAvailableFunctions() {
-            List<OpCode> functions = new();
+        public static List<OpCode> GetAvailableOpCodes() {
+            List<OpCode> opCodes = new();
 
-            Type functionType = typeof(OpCode);
             Assembly asm = Assembly.GetExecutingAssembly();
             Type fa = typeof(OpCodeAttr);
 
-            foreach(Type t in asm.GetTypes())
-                if(t.GetCustomAttribute(fa) != null)
-                    functions.Add((OpCode)(t.Assembly.CreateInstance(t.FullName)));
+            foreach(Type t in asm.GetTypes()) {
+                if(t.GetCustomAttribute(fa) != null) {
+                    opCodes.Add((OpCode)(t.Assembly.CreateInstance(t.FullName)));
+                }
+            }
 
-            return functions;
+            return opCodes;
+        }
+
+        public int ComparePrecedence(OpCode oc) {
+            return this.Precedence - oc.Precedence;
         }
     }
 }

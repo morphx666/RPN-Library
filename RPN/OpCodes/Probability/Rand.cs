@@ -7,16 +7,14 @@ namespace RPN.OpCodes.Probability {
         private static Random rnd;
 
         public Rand() {
-            base.ArgumentCount = 0;
-            base.Symbols = new string[] { nameof(Rand).ToUpper() };
-            base.DataTypes = new Types[] { Types.Any };
+            Symbols = new string[] { nameof(Rand).ToUpper() };
 
             rnd = new Random();
         }
 
-        public override void ExecuteInternal(Stack<string> stack, Types dataType) {
+        public override void ExecuteInternal(RPNStack rpn, Types dataType) {
             double v1 = rnd.NextDouble();
-            stack.Push(v1.ToString());
+            rpn.Push(v1.ToString());
         }
     }
 }

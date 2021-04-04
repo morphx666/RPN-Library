@@ -8,6 +8,5 @@ namespace RPN {
         public OpCodeAttr(string description) {
             Description = description;
         }
-
     }
 }

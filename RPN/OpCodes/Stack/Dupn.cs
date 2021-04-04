@@ -5,20 +5,19 @@ namespace RPN.OpCodes.Stack {
     [OpCodeAttr(nameof(DupN))]
     public class DupN : OpCode {
         public DupN() {
-            base.ArgumentCount = 1;
-            base.Symbols = new string[] { nameof(DupN).ToUpper() };
-            base.DataTypes = new Types[] { Types.Any };
+            ArgumentCount = 1;
+            Symbols = new string[] { nameof(DupN).ToUpper() };
         }
 
-        public override void ExecuteInternal(Stack<string> stack, Types dataType) {
-            int v1 = int.Parse(stack.Pop());
-            if(stack.Count < v1) {
-                stack.Push(v1.ToString());
+        public override void ExecuteInternal(RPNStack rpn, Types dataType) {
+            int v1 = int.Parse(rpn.Pop());
+            if(rpn.Count < v1) {
+                rpn.Push(v1.ToString());
                 throw new ArgumentException("Too few arguments");
             }
             string[] stk = new string[v1];
-            Array.Copy(stack.ToArray(), stack.Count - v1, stk, 0, v1);
-            while(--v1 >= 0) stack.Push(stk[v1]);
+            Array.Copy(rpn.ToArray(), rpn.Count - v1, stk, 0, v1);
+            while(--v1 >= 0) rpn.Push(stk[v1]);
         }
     }
 }

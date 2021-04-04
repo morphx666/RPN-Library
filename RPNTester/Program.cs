@@ -1,5 +1,6 @@
 ﻿using RPN;
 using System;
+using System.Diagnostics;
 
 namespace RPNTester {
     public class Program {
@@ -13,6 +14,10 @@ namespace RPNTester {
             Console.ForegroundColor = ConsoleColor.White;
 
             int maxStack = 4;
+
+            //var r = rpn.Push(rpn.InfixToRPN("X+(COS((X)))"));
+            //var r = rpn.Push(rpn.InfixToRPN("( 1 + (27) ) * ( 3 / 4 ) ^ ( 5 + 6 )"));
+            //Debugger.Break();
 
             while(true) {
                 RefreshScreen(maxStack);
@@ -54,14 +59,14 @@ namespace RPNTester {
 
                     char kc = k.KeyChar;
                     string kcs = kc.ToString();
-                    if(!stringMode && rpn.IsFunction(kcs)) {
-                        rpn.Push(newEntry);
+                    if(!stringMode && rpn.IsOpCode(kcs)) {
+                        if(newEntry != "") rpn.Push(newEntry);
                         rpn.Push(kcs);
                         break;
                     }
 
-                    if(char.IsLetterOrDigit(kc) || 
-                       char.IsSymbol(kc) || 
+                    if(char.IsLetterOrDigit(kc) ||
+                       char.IsSymbol(kc) ||
                        char.IsPunctuation(kc) ||
                        char.IsWhiteSpace(kc)) {
                         newEntry += kcs;

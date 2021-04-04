@@ -5,18 +5,17 @@ namespace RPN.OpCodes.Stack {
     [OpCodeAttr(nameof(DropN))]
     public class DropN : OpCode {
         public DropN() {
-            base.ArgumentCount = 1;
-            base.Symbols = new string[] { nameof(DropN).ToUpper() };
-            base.DataTypes = new Types[] { Types.Any };
+            ArgumentCount = 1;
+            Symbols = new string[] { nameof(DropN).ToUpper() };
         }
 
-        public override void ExecuteInternal(Stack<string> stack, Types dataType) {
-            int v1 = int.Parse(stack.Pop());
-            if(stack.Count < v1) {
-                stack.Push(v1.ToString());
+        public override void ExecuteInternal(RPNStack rpn, Types dataType) {
+            int v1 = int.Parse(rpn.Pop());
+            if(rpn.Count < v1) {
+                rpn.Push(v1.ToString());
                 throw new ArgumentException("Too few arguments");
             }
-            while(--v1 >= 0) stack.Pop();
+            while(--v1 >= 0) rpn.Pop();
         }
     }
 }

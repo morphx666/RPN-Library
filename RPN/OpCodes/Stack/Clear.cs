@@ -4,13 +4,11 @@ namespace RPN.OpCodes.Stack {
     [OpCodeAttr(nameof(Clear))]
     public class Clear : OpCode {
         public Clear() {
-            base.ArgumentCount = 0;
-            base.Symbols = new string[] { nameof(Clear).ToUpper() };
-            base.DataTypes = new Types[] { Types.Any };
+            Symbols = new string[] { nameof(Clear).ToUpper() };
         }
 
-        public override void ExecuteInternal(Stack<string> stack, Types dataType) {
-            stack.Clear();
+        public override void ExecuteInternal(RPNStack rpn, Types dataType) {
+            rpn.Clear();
         }
     }
 }

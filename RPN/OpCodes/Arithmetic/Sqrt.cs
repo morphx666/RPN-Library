@@ -5,18 +5,20 @@ namespace RPN.OpCodes.Arithmetic {
     [OpCodeAttr(nameof(Sqrt))]
     public class Sqrt : OpCode {
         public Sqrt() {
-            base.ArgumentCount = 1;
-            base.Symbols = new string[] { nameof(Sqrt).ToUpper(), "√" };
-            base.DataTypes = new Types[] { Types.Number, Types.Formula };
+            ArgumentCount = 1;
+            Symbols = new string[] { nameof(Sqrt).ToUpper(), "√" };
+            DataTypes = new Types[] { Types.Number, Types.Infix };
+            Associativity = Associativities.Right;
+            Precedence = 5;
         }
 
-        public override void ExecuteInternal(Stack<string> stack, Types dataType) {
-            if((dataType & Types.Formula) == Types.Formula) {
-                string v1 = stack.Pop().Replace("'", "");
-                stack.Push($"'√({v1})'");
+        public override void ExecuteInternal(RPNStack rpn, Types dataType) {
+            if((dataType & Types.Infix) == Types.Infix) {
+                string v1 = rpn.Pop().Replace("'", "");
+                rpn.Push($"'√({v1})'");
             } else {
-                double v1 = double.Parse(stack.Pop());
-                stack.Push(Math.Sqrt(v1).ToString());
+                double v1 = double.Parse(rpn.Pop());
+                rpn.Push(Math.Sqrt(v1).ToString());
             }
         }
     }

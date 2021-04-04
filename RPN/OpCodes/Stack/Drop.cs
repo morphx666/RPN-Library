@@ -4,13 +4,12 @@ namespace RPN.OpCodes.Stack {
     [OpCodeAttr(nameof(Drop))]
     public class Drop : OpCode {
         public Drop() {
-            base.ArgumentCount = 1;
-            base.Symbols = new string[] { nameof(Drop).ToUpper() };
-            base.DataTypes = new Types[] { Types.Any };
+            ArgumentCount = 1;
+            Symbols = new string[] { nameof(Drop).ToUpper() };
         }
 
-        public override void ExecuteInternal(Stack<string> stack, Types dataType) {
-            stack.Pop();
+        public override void ExecuteInternal(RPNStack rpn, Types dataType) {
+            rpn.Pop();
         }
     }
 }
