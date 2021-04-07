@@ -40,9 +40,7 @@ namespace RPN.OpCodes {
 
         public bool Execute(RPNStack rpn) {
             try {
-                if(rpn.Count < ArgumentCount) {
-                    throw new Exception($"Too Few Arguments");
-                }
+                if(rpn.Count < ArgumentCount) throw new Exception($"Too Few Arguments");
 
                 int dataType = 0;
                 if(ArgumentCount > 0) {
@@ -50,17 +48,20 @@ namespace RPN.OpCodes {
                     Array.Copy(rpn.ToArray(), 0, tokens, 0, ArgumentCount);
 
                     for(int i = 0; i < tokens.Length; i++) {
+                        bool canCast = false;
                         for(int j = 0; j < DataTypes.Length; j++) {
                             if((tokens[i].Type & DataTypes[j]) != 0) {
-                                //dataType = Math.Max(dataType, (int)DataTypes[j]);
                                 dataType = Math.Max(dataType, (int)tokens[i].Type);
+                                canCast = true;
                             }
+                        }
+                        if(!canCast) {
+                            dataType = 0;
+                            break;
                         }
                     }
 
-                    if(dataType == 0) {
-                        throw new Exception("Bad Argument Type");
-                    }
+                    if(dataType == 0) throw new Exception("Bad Argument Type");
                 }
 
                 ExecuteInternal(rpn, (Types)dataType);
