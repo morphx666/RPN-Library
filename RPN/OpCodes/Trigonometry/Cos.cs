@@ -13,8 +13,8 @@ namespace RPN.OpCodes.Trigonometry {
 
         public override void ExecuteInternal(RPNStack rpn, Types dataType) {
             if((dataType & Types.Infix) == Types.Infix) {
-                string v1 = rpn.Pop().Replace("'", "");
-                rpn.Push($"'{Symbols[0]}({v1})'");
+                string v1 = rpn.Pop();
+                rpn.Push($"{Symbols[0]}({v1})");
             } else {
                 double v1 = double.Parse(rpn.Pop());
                 rpn.Push(Math.Cos(v1).ToString());

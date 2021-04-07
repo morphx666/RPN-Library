@@ -11,7 +11,7 @@
 
         public override void ExecuteInternal(RPNStack rpn, Types dataType) {
             if((dataType & Types.Infix) == Types.Infix) {
-                string v1 = rpn.Pop().Replace("'", "");
+                string v1 = rpn.Pop();
                 rpn.Push($"1/({v1})");
             } else {
                 double v1 = double.Parse(rpn.Pop());

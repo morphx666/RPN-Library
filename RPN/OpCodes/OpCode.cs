@@ -76,15 +76,19 @@ namespace RPN.OpCodes {
         }
 
         internal static Types InferType(string token) {
-            if(double.TryParse(token, out double v)) {
-                if(Math.Floor(v) == v) return Types.Integer;
-                return Types.Float;
-            } else if(token.StartsWith('(') && token.Contains(',')) {
-                return Types.Complex;
-            } else if(token.StartsWith('"')) {
-                return Types.String;
-            } else
-                return Types.Infix;
+            if(token == "") {
+                return Types.Any;
+            } else { 
+                if(double.TryParse(token, out double v)) {
+                    if(Math.Floor(v) == v) return Types.Integer;
+                    return Types.Float;
+                } else if(token.StartsWith('(') && token.Contains(',')) {
+                    return Types.Complex;
+                } else if(token.StartsWith('"')) {
+                    return Types.String;
+                } else
+                    return Types.Infix;
+            }
         }
 
         public static List<OpCode> GetAvailableOpCodes() {

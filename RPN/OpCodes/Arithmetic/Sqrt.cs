@@ -13,8 +13,8 @@ namespace RPN.OpCodes.Arithmetic {
 
         public override void ExecuteInternal(RPNStack rpn, Types dataType) {
             if((dataType & Types.Infix) == Types.Infix) {
-                string v1 = rpn.Pop().Replace("'", "");
-                rpn.Push($"'√({v1})'");
+                string v1 = rpn.Pop();
+                rpn.Push($"√({v1})");
             } else {
                 double v1 = double.Parse(rpn.Pop());
                 rpn.Push(Math.Sqrt(v1).ToString());

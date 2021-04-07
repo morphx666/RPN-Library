@@ -27,10 +27,17 @@ namespace RPN {
             string[] stk = new string[max];
             string tmp;
             string idx;
+            string ctr = "";
             Array.Copy(stack.ToArray(), 0, stk, 0, Math.Min(max, stack.Count));
             for(int i = max - 1; i >= 0; i--) {
                 idx = (i + 1).ToString();
                 tmp = stk[i] ?? "";
+                switch(InferType(tmp)) {
+                    case Types.Infix:
+                        ctr = "'";
+                        break;
+                }
+                tmp = $"{ctr}{tmp}{ctr}";
                 tmp = tmp.Length <= ColumnWidth ?
                         tmp :
                         "…" + stk[i][(stk[i].Length - ColumnWidth + idx.Length + 2)..];
@@ -60,6 +67,13 @@ namespace RPN {
             }
 
             return null;
+        }
+
+        private bool ContainsOpCodes(List<string> tokens) {
+            foreach(string token in tokens) {
+                if(IsOpCode(token)) return true;
+            }
+            return false;
         }
 
         public void ResetErrorState() {
@@ -160,9 +174,9 @@ namespace RPN {
 
             string infix = InfixToRPN(token);
             if(infix == token) {
-                return $"'{token}'";
+                return $"{token}";
             } else {
-                return $"'{RPNToInfix(infix)}'";
+                return $"{RPNToInfix(infix)}";
             }
         }
 
@@ -188,7 +202,7 @@ namespace RPN {
                         OpCode cOp = GetOpCode(token); // Current operator
                         OpCode lOp = GetOpCode(stack.Peek()); // Top operator from the stack
                         if((cOp.Associativity == Associativities.Left && cOp.ComparePrecedence(lOp) <= 0) ||
-                                (cOp.Associativity == Associativities.Right && cOp.ComparePrecedence(lOp) < 0)) {
+                           (cOp.Associativity == Associativities.Right && cOp.ComparePrecedence(lOp) < 0)) {
                             // Pop (y) from the stack S[5]
                             // Add (y) output buffer S[6]
                             output.Add(stack.Pop());
@@ -235,7 +249,6 @@ namespace RPN {
 
             bool isNumber(int i) => char.IsDigit(exp[i]) || exp[i] == '.' || (i == 0 && (exp[i] == '+' || exp[i] == '-'));
 
-            exp = exp.Replace("'", "");
             mode = isNumber(0) ? 0 : 1;
 
             for(int i = 0; i < exp.Length; i++) {
@@ -290,7 +303,7 @@ namespace RPN {
             return tokens;
         }
 
-        // https://www.geeksforgeeks.org/postfix-to-infix/
+        // https://rosettacode.org/wiki/Parsing/RPN_to_infix_conversion#C.23
         public string RPNToInfix(string tokens) {
             Stack<string> stack = new();
             Stack<OpCode> ocs = new();
@@ -315,17 +328,11 @@ namespace RPN {
                         case 2:
                             string v1 = stack.Pop();
                             string v2 = stack.Pop();
-                            if(ocs.Count > 0 && oc.ComparePrecedence(ocs.Peek()) > 0)
-                                switch(oc.Associativity) {
-                                    case Associativities.Left:
-                                        arg = $"{v2}{token}({v1})";
-                                        break;
-                                    case Associativities.Right:
-                                        arg = $"({v2}){token}{v1}"; 
-                                        break;
-                                }
-                            else
-                                arg = $"{v2}{token}{v1}";
+                            if(ocs.Count > 0 && oc.ComparePrecedence(ocs.Peek()) > 0) {
+                                if(InferType(v1) == Types.Infix && ContainsOpCodes(Tokenize(v1))) v1 = $"({v1})";
+                                if(InferType(v2) == Types.Infix && ContainsOpCodes(Tokenize(v2))) v2 = $"({v2})";
+                            }
+                            arg = $"{v2}{token}{v1}";
                             break;
                         default:
                             Debugger.Break(); // TODO: Convert this to a function of the form

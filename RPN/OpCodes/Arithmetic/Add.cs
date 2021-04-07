@@ -15,8 +15,8 @@
                 string v2 = rpn.Pop().Replace("\"", "");
                 rpn.Push($"\"{v2}{v1}\"");
             } else if((dataType & Types.Infix) == Types.Infix) {
-                string v1 = rpn.Pop().Replace("'", "");
-                string v2 = rpn.Pop().Replace("'", "");
+                string v1 = rpn.Pop();
+                string v2 = rpn.Pop();
                 rpn.Push($"({v2})+({v1})");
             } else {
                 double v1 = double.Parse(rpn.Pop());
