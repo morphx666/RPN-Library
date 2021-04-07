@@ -293,6 +293,7 @@ namespace RPN {
                     if(cb == exp.Length) break;
                     i = cb - 1;
                 } else if(c == ')') {
+                    if(!string.IsNullOrEmpty(v) && v != "(") tokens.Add(v);
                     tokens.Add(")");
                     v = "";
                     continue;
@@ -317,7 +318,6 @@ namespace RPN {
                                 if(!string.IsNullOrEmpty(v)) tokens.Add(v);
                                 tokens.Add(c.ToString());
                                 v = "";
-                                mode = 1;
                             } else {
                                 v += c;
                             }
