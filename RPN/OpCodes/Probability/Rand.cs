@@ -12,8 +12,8 @@ namespace RPN.OpCodes.Probability {
         }
 
         public override void ExecuteInternal(RPNStack rpn, Types dataType) {
-            double v1 = rnd.NextDouble();
-            rpn.Push(v1.ToString());
+            double d1 = rnd.NextDouble();
+            rpn.Push(d1.ToString(), Types.Float);
         }
     }
 }

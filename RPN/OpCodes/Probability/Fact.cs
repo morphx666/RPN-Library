@@ -12,12 +12,13 @@ namespace RPN.OpCodes.Probability {
         }
 
         public override void ExecuteInternal(RPNStack rpn, Types dataType) {
+            string v1 = rpn.Pop().Token;
+
             if((dataType & Types.Infix) == Types.Infix) {
-                string v1 = rpn.Pop();
-                rpn.Push($"{Symbols[0]}({v1})");
+                rpn.Push($"{Symbols[0]}({v1})", dataType);
             } else {
-                double v1 = double.Parse(rpn.Pop());
-                rpn.Push(SpecialFunctions.Fact(v1).ToString());
+                double d1 = double.Parse(v1);
+                rpn.Push(SpecialFunctions.Fact(d1).ToString(), dataType);
             }
         }
     }

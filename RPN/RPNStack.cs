@@ -7,12 +7,46 @@ using static RPN.OpCodes.OpCode;
 
 namespace RPN {
     public class RPNStack {
+        public record StackItem {
+            public string Token { get; init; }
+            public Types Type { get; init; }
+            public bool HasDelimeters { get; init; }
+
+            public string AsString() {
+                return Type switch {
+                    Types.Infix => $"'{Token}'",
+                    Types.String => $"\"{Token}\"",
+                    _ => Token,
+                };
+            }
+
+            public StackItem(string token, Types type) {
+                if(token == null) {
+                    Token = ""; 
+                } else {
+                    switch(type) {
+                        case Types.Infix:
+                            Token = token.Replace("'", "");
+                            break;
+                        case Types.String:
+                            Token = token.Replace("\"", "");
+                            break;
+                        default:
+                            Token = token;
+                            break;
+                    }
+                }
+                Type = type;
+                HasDelimeters = type == Types.Infix || type == Types.String;
+            }
+        }
+
         public int ColumnWidth { get; init; }
 
         public string ErrorFunction { get; internal set; } = "";
         public string ErrorMessage { get; internal set; } = "";
 
-        private readonly Stack<string> stack;
+        private readonly Stack<StackItem> stack;
         private readonly List<OpCode> opCodes;
         private readonly bool SimplifyTokens;
 
@@ -24,23 +58,26 @@ namespace RPN {
         }
 
         public void PrintStack(int max = 4) {
-            string[] stk = new string[max];
+            StackItem[] stk = new StackItem[max];
+            Array.Copy(stack.ToArray(), 0, stk, 0, Math.Min(max, stack.Count));
+
             string tmp;
             string idx;
-            string ctr = "";
-            Array.Copy(stack.ToArray(), 0, stk, 0, Math.Min(max, stack.Count));
+            int cw;
             for(int i = max - 1; i >= 0; i--) {
                 idx = (i + 1).ToString();
-                tmp = stk[i] ?? "";
-                switch(InferType(tmp)) {
-                    case Types.Infix:
-                        ctr = "'";
-                        break;
+
+                if(stk[i] == null) {
+                    cw = ColumnWidth;
+                    tmp = "";
+                } else {
+                    cw = ColumnWidth - (stk[i].HasDelimeters ? 2 : 0);
+                    tmp = stk[i].AsString();
                 }
-                tmp = $"{ctr}{tmp}{ctr}";
-                tmp = tmp.Length <= ColumnWidth ?
+
+                tmp = tmp.Length <= cw ?
                         tmp :
-                        "…" + stk[i][(stk[i].Length - ColumnWidth + idx.Length + 2)..];
+                        "…" + stk[i].Token[(tmp.Length - cw + idx.Length + 2)..];
                 Console.Write($"{tmp.PadLeft(ColumnWidth)}");
                 Console.CursorLeft = 0;
                 Console.WriteLine(idx + ":");
@@ -85,7 +122,7 @@ namespace RPN {
             get => stack.Count;
         }
 
-        public string[] ToArray() {
+        public StackItem[] ToArray() {
             return stack.ToArray();
         }
 
@@ -93,32 +130,38 @@ namespace RPN {
             stack.Clear();
         }
 
-        public string Pop() {
+        public StackItem Pop() {
             return stack.Pop();
         }
 
-        public string Peek() {
+        public StackItem Peek() {
             return stack.Peek();
         }
 
-        public void CopyTo(string[] destination) {
+        public void CopyTo(StackItem[] destination) {
             stack.CopyTo(destination, 0);
         }
 
-        public bool Push(string tokens) {
+        public bool Push(StackItem item) {
+            return Push(item.Token, item.Type);
+        }
+
+        public bool Push(string tokens, Types dataType = Types.Any) {
             ResetErrorState();
             if(tokens == "") return false;
 
             bool isFunction = false;
             foreach(string subToken in tokens.Split(' ')) {
-                isFunction |= ParseToken(subToken);
+                isFunction |= ParseToken(subToken, dataType);
             }
             return isFunction;
         }
 
-        private bool ParseToken(string token) {
+        private bool ParseToken(string token, Types dataType = Types.Any) {
             bool isOpCode = false;
             bool hasErrors = false;
+
+            if(dataType == Types.Number) Debugger.Break();
 
             if(token != "") {
                 foreach(OpCode oc in opCodes) {
@@ -136,30 +179,16 @@ namespace RPN {
                 }
 
                 if(!isOpCode && !hasErrors) {
-                    Types dataType = InferType(token);
-                    if((dataType & Types.String) == Types.String) {
-                        stack.Push($"\"{token.Replace("\"", "")}\"");
-                    } else if((dataType & Types.Infix) == Types.Infix) {
+                    if(dataType == Types.Any) dataType = InferType(token);
+                    if(dataType == Types.Infix) {
                         try {
-                            stack.Push(Simplify(token));
+                            stack.Push(new StackItem(Simplify(token), Types.Infix));
                         } catch {
                             ErrorFunction = "";
                             ErrorMessage = "Invalid Syntax";
                         }
                     } else {
-                        try {
-                            double tmp = double.Parse(token);
-                            stack.Push(token);
-                        } catch { // FIXME: If it fails then it must be a string.
-                                  // Of course, this will require a more robust parsing algorithm if we want
-                                  // to support more object types, besides numbers and strings.
-                            try {
-                                stack.Push(Simplify(token));
-                            } catch {
-                                ErrorFunction = "";
-                                ErrorMessage = "Invalid Syntax";
-                            }
-                        }
+                        stack.Push(new StackItem(token, dataType));
                     }
                 }
             }

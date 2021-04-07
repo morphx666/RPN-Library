@@ -9,12 +9,13 @@ namespace RPN.OpCodes.Stack {
         }
 
         public override void ExecuteInternal(RPNStack rpn, Types dataType) {
-            int v1 = int.Parse(rpn.Pop());
-            if(rpn.Count < v1) {
-                rpn.Push(v1.ToString());
+            int i1 = int.Parse(rpn.Pop().Token);
+
+            if(rpn.Count < i1) {
+                rpn.Push(i1.ToString(), Types.Integer);
                 throw new ArgumentException("Too few arguments");
             }
-            while(--v1 >= 0) rpn.Pop();
+            while(--i1 >= 0) rpn.Pop();
         }
     }
 }

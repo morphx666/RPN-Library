@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using static RPN.RPNStack;
 
 namespace RPN.OpCodes {
     public abstract class OpCode {
@@ -45,13 +46,14 @@ namespace RPN.OpCodes {
 
                 int dataType = 0;
                 if(ArgumentCount > 0) {
-                    string[] tokens = new string[ArgumentCount];
+                    StackItem[] tokens = new StackItem[ArgumentCount];
                     Array.Copy(rpn.ToArray(), 0, tokens, 0, ArgumentCount);
 
                     for(int i = 0; i < tokens.Length; i++) {
                         for(int j = 0; j < DataTypes.Length; j++) {
-                            if((InferType(tokens[i]) & DataTypes[j]) != 0) {
-                                dataType = Math.Max((int)dataType, (int)DataTypes[j]);
+                            if((tokens[i].Type & DataTypes[j]) != 0) {
+                                //dataType = Math.Max(dataType, (int)DataTypes[j]);
+                                dataType = Math.Max(dataType, (int)tokens[i].Type);
                             }
                         }
                     }

@@ -30,7 +30,7 @@ namespace RPNTester {
                     ConsoleKey key = k.Key;
 
                     if(key == ConsoleKey.E) { // E = Eval
-                        foreach(string token in rpn.InfixToRPN(rpn.Pop()).Split(' '))
+                        foreach(string token in rpn.InfixToRPN(rpn.Pop().Token).Split(' '))
                             rpn.Push(token);
                         break;
                     }

@@ -12,12 +12,13 @@ namespace RPN.OpCodes.Arithmetic {
         }
 
         public override void ExecuteInternal(RPNStack rpn, Types dataType) {
+            string v1 = rpn.Pop().Token;
+
             if((dataType & Types.Infix) == Types.Infix) {
-                string v1 = rpn.Pop();
-                rpn.Push($"√({v1})");
+                rpn.Push($"√({v1})", dataType);
             } else {
-                double v1 = double.Parse(rpn.Pop());
-                rpn.Push(Math.Sqrt(v1).ToString());
+                double d1 = double.Parse(v1);
+                rpn.Push(Math.Sqrt(d1).ToString(), dataType);
             }
         }
     }

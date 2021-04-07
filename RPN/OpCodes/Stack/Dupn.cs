@@ -1,4 +1,5 @@
 ﻿using System;
+using static RPN.RPNStack;
 
 namespace RPN.OpCodes.Stack {
     [OpCodeAttr(nameof(DupN))]
@@ -9,14 +10,15 @@ namespace RPN.OpCodes.Stack {
         }
 
         public override void ExecuteInternal(RPNStack rpn, Types dataType) {
-            int v1 = int.Parse(rpn.Pop());
-            if(rpn.Count < v1) {
-                rpn.Push(v1.ToString());
+            int i1 = int.Parse(rpn.Pop().Token);
+
+            if(rpn.Count < i1) {
+                rpn.Push(i1.ToString(), Types.Integer);
                 throw new ArgumentException("Too few arguments");
             }
-            string[] stk = new string[v1];
-            Array.Copy(rpn.ToArray(), rpn.Count - v1, stk, 0, v1);
-            while(--v1 >= 0) rpn.Push(stk[v1]);
+            StackItem[] stk = new StackItem[i1];
+            Array.Copy(rpn.ToArray(), rpn.Count - i1, stk, 0, i1);
+            while(--i1 >= 0) rpn.Push(stk[i1]);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace RPN.OpCodes.Stack {
+﻿using static RPN.RPNStack;
+
+namespace RPN.OpCodes.Stack {
     [OpCodeAttr(nameof(Rot))]
     public class Rot : OpCode {
         public Rot() {
@@ -7,7 +9,7 @@
         }
 
         public override void ExecuteInternal(RPNStack rpn, Types dataType) {
-            string[] stk = new string[rpn.Count];
+            StackItem[] stk = new StackItem[rpn.Count];
             rpn.CopyTo(stk);
             rpn.Clear();
             for(int i = stk.Length - 2; i >= 0; i--) rpn.Push(stk[i]);

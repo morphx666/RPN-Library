@@ -10,18 +10,17 @@
         }
 
         public override void ExecuteInternal(RPNStack rpn, Types dataType) {
+            string v1 = rpn.Pop().Token;
+            string v2 = rpn.Pop().Token;
+
             if((dataType & Types.String) == Types.String) {
-                string v1 = rpn.Pop().Replace("\"", "");
-                string v2 = rpn.Pop().Replace("\"", "");
-                rpn.Push($"\"{v2}{v1}\"");
+                rpn.Push($"{v2}{v1}", dataType);
             } else if((dataType & Types.Infix) == Types.Infix) {
-                string v1 = rpn.Pop();
-                string v2 = rpn.Pop();
-                rpn.Push($"({v2})+({v1})");
+                rpn.Push($"({v2})+({v1})", dataType);
             } else {
-                double v1 = double.Parse(rpn.Pop());
-                double v2 = double.Parse(rpn.Pop());
-                rpn.Push((v2 + v1).ToString());
+                double d1 = double.Parse(v1);
+                double d2 = double.Parse(v2);
+                rpn.Push((d2 + d1).ToString(), dataType);
             }
         }
     }
