@@ -8,8 +8,8 @@ namespace RPNTester {
         private static readonly int cw2 = cw1 - 1;
 
         public static void Main(string[] args) {
-            ClearScreen(false);
             Console.OutputEncoding = System.Text.Encoding.UTF8;
+            ClearScreen(false);
             Console.BackgroundColor = ConsoleColor.DarkBlue;
             Console.ForegroundColor = ConsoleColor.White;
 
@@ -18,7 +18,7 @@ namespace RPNTester {
             //var r = rpn.Push(rpn.InfixToRPN("X+(COS((X)))"));
             //var r = rpn.Push(rpn.InfixToRPN("( 1 + (27) ) * ( 3 / 4 ) ^ ( 5 + 6 )"));
             //var r = rpn.Push("a b + c d + / x y -");
-            var r = rpn.Push("1 a 1 + b 1 + / /");
+            //var r = rpn.Push("1 a 1 + b 1 + / /");
             //Debugger.Break();
             //var r = rpn.Push("'1/5^3'");
 
@@ -30,11 +30,6 @@ namespace RPNTester {
                 while(true) {
                     ConsoleKeyInfo k = Console.ReadKey(true);
                     ConsoleKey key = k.Key;
-
-                    if(key == ConsoleKey.E) {
-                        rpn.Push("EVAL");
-                        break;
-                    }
 
                     if(key == ConsoleKey.Oem7) { // '
                         stringMode = !stringMode;

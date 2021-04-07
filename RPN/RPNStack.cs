@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.Linq;
 using static RPN.OpCodes.OpCode;
 
+// HP48GX Manual: http://h10032.www1.hp.com/ctg/Manual/c00442262.pdf
+
 namespace RPN {
     public class RPNStack {
         public record StackItem {
@@ -63,21 +65,12 @@ namespace RPN {
 
             string tmp;
             string idx;
-            int cw;
             for(int i = max - 1; i >= 0; i--) {
                 idx = (i + 1).ToString();
-
-                if(stk[i] == null) {
-                    cw = ColumnWidth;
-                    tmp = "";
-                } else {
-                    cw = ColumnWidth - (stk[i].HasDelimeters ? 2 : 0);
-                    tmp = stk[i].AsString();
-                }
-
-                tmp = tmp.Length <= cw ?
+                tmp = stk[i] == null ? "" : tmp = stk[i].AsString();
+                tmp = tmp.Length <= ColumnWidth - (idx.Length + 1) ?
                         tmp :
-                        "…" + tmp[(tmp.Length - cw + idx.Length + 2)..];
+                        "…" + tmp[(tmp.Length - ColumnWidth + idx.Length + 2)..];
                 Console.Write($"{tmp.PadLeft(ColumnWidth)}");
                 if(showTypes) {
                     if(tmp != "") tmp = stk[i].Type.ToString();
