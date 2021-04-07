@@ -18,6 +18,7 @@ namespace RPNTester {
             //var r = rpn.Push(rpn.InfixToRPN("X+(COS((X)))"));
             //var r = rpn.Push(rpn.InfixToRPN("( 1 + (27) ) * ( 3 / 4 ) ^ ( 5 + 6 )"));
             //var r = rpn.Push("a b + c d + / x y -");
+            var r = rpn.Push("1 a 1 + b 1 + / /");
             //Debugger.Break();
             //var r = rpn.Push("'1/5^3'");
 

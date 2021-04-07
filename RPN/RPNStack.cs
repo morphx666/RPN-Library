@@ -363,9 +363,11 @@ namespace RPN {
                         case 2:
                             string v1 = stack.Pop();
                             string v2 = stack.Pop();
-                            if(ocs.Count > 0 && oc.ComparePrecedence(ocs.Peek()) > 0) {
-                                if(InferType(v1) == Types.Infix && ContainsOpCodes(Tokenize(v1))) v1 = $"({v1})";
-                                if(InferType(v2) == Types.Infix && ContainsOpCodes(Tokenize(v2))) v2 = $"({v2})";
+                            bool v1hoc = ContainsOpCodes(Tokenize(v1));
+                            bool v2hoc = ContainsOpCodes(Tokenize(v2));
+                            if(ocs.Count > 0 && (oc.ComparePrecedence(ocs.Peek()) > 0 || v1hoc || v2hoc)) {
+                                if(InferType(v1) == Types.Infix && v1hoc) v1 = $"({v1})";
+                                if(InferType(v2) == Types.Infix && v2hoc) v2 = $"({v2})";
                             }
                             arg = $"{v2}{token}{v1}";
                             break;
