@@ -206,6 +206,7 @@ namespace RPN {
         private string Simplify(string token) {
             if(!SimplifyTokens) return token;
 
+            token = token.Replace("'", "");
             string infix = InfixToRPN(token);
             if(infix == token) {
                 return $"{token}";
@@ -338,7 +339,7 @@ namespace RPN {
         }
 
         // https://rosettacode.org/wiki/Parsing/RPN_to_infix_conversion#C.23
-        public string RPNToInfix(string tokens) {
+        public string RPNToInfix(string tokens) { // FIXME: This code sucks!
             Stack<string> stack = new();
             Stack<OpCode> ocs = new();
 
