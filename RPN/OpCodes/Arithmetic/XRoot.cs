@@ -1,11 +1,11 @@
 ﻿using System;
 
 namespace RPN.OpCodes.Arithmetic {
-    [OpCodeAttr(nameof(Sqrt))]
-    public class Sqrt : OpCode {
-        public Sqrt() {
-            ArgumentCount = 1;
-            Symbols = new string[] { "√", nameof(Sqrt).ToUpper() };
+    [OpCodeAttr(nameof(XRoot))]
+    public class XRoot : OpCode {
+        public XRoot() {
+            ArgumentCount = 2;
+            Symbols = new string[] { nameof(XRoot).ToUpper() };
             DataTypes = new Types[] { Types.Number, Types.Infix };
             Associativity = Associativities.Right;
             Precedence = 5;
@@ -13,12 +13,14 @@ namespace RPN.OpCodes.Arithmetic {
 
         public override void ExecuteInternal(RPNStack rpn, Types dataType) {
             string v1 = rpn.Pop().Token;
+            string v2 = rpn.Pop().Token;
 
             if((dataType & Types.Infix) == Types.Infix) {
-                rpn.Push($"{Symbols[0]}({v1})", dataType);
+                rpn.Push($"({v2})^({v1})", dataType);
             } else {
                 double d1 = double.Parse(v1);
-                rpn.Push(Math.Sqrt(d1).ToString(), dataType);
+                double d2 = double.Parse(v2);
+                rpn.Push(Math.Pow(d2, 1/d1).ToString(), dataType);
             }
         }
     }

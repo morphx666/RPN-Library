@@ -1,11 +1,11 @@
 ﻿using System;
 
 namespace RPN.OpCodes.Arithmetic {
-    [OpCodeAttr(nameof(Sqrt))]
-    public class Sqrt : OpCode {
-        public Sqrt() {
+    [OpCodeAttr(nameof(Exp))]
+    public class Exp : OpCode {
+        public Exp() {
             ArgumentCount = 1;
-            Symbols = new string[] { "√", nameof(Sqrt).ToUpper() };
+            Symbols = new string[] { nameof(Exp).ToUpper() };
             DataTypes = new Types[] { Types.Number, Types.Infix };
             Associativity = Associativities.Right;
             Precedence = 5;
@@ -18,7 +18,7 @@ namespace RPN.OpCodes.Arithmetic {
                 rpn.Push($"{Symbols[0]}({v1})", dataType);
             } else {
                 double d1 = double.Parse(v1);
-                rpn.Push(Math.Sqrt(d1).ToString(), dataType);
+                rpn.Push(Math.Exp(d1).ToString(), dataType);
             }
         }
     }
