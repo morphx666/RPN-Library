@@ -9,6 +9,7 @@ namespace RPNTester {
 
         public static void Main(string[] args) {
             ClearScreen(false);
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
             Console.BackgroundColor = ConsoleColor.DarkBlue;
             Console.ForegroundColor = ConsoleColor.White;
 

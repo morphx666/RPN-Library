@@ -82,7 +82,7 @@ namespace RPN.OpCodes {
                 return Types.Any;
             } else { 
                 if(double.TryParse(token, out double v)) {
-                    if(Math.Floor(v) == v) return Types.Integer;
+                    if((int)v == v) return Types.Integer;
                     return Types.Float;
                 } else if(token.StartsWith('(') && token.Contains(',')) {
                     return Types.Complex;

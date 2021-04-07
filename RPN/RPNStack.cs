@@ -57,7 +57,7 @@ namespace RPN {
             SimplifyTokens = simplifyTokens;
         }
 
-        public void PrintStack(int max = 4) {
+        public void PrintStack(int max = 4, bool showTypes = false) {
             StackItem[] stk = new StackItem[max];
             Array.Copy(stack.ToArray(), 0, stk, 0, Math.Min(max, stack.Count));
 
@@ -77,8 +77,12 @@ namespace RPN {
 
                 tmp = tmp.Length <= cw ?
                         tmp :
-                        "…" + stk[i].Token[(tmp.Length - cw + idx.Length + 2)..];
+                        "…" + tmp[(tmp.Length - cw + idx.Length + 2)..];
                 Console.Write($"{tmp.PadLeft(ColumnWidth)}");
+                if(showTypes) {
+                    if(tmp != "") tmp = stk[i].Type.ToString();
+                    Console.Write($"|{tmp,10}");
+                }
                 Console.CursorLeft = 0;
                 Console.WriteLine(idx + ":");
             }
