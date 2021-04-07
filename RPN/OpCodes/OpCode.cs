@@ -29,6 +29,8 @@ namespace RPN.OpCodes {
             Right
         }
 
+        public string Section { get; internal set; }
+
         public string ErrorFunction { get; internal set; } = "";
         public string ErrorMessage { get; internal set; } = "";
         public int ArgumentCount { get; init; } = 0;
@@ -104,7 +106,9 @@ namespace RPN.OpCodes {
 
             foreach(Type t in asm.GetTypes()) {
                 if(t.GetCustomAttribute(fa) != null) {
-                    opCodes.Add((OpCode)(t.Assembly.CreateInstance(t.FullName)));
+                    OpCode oc = (OpCode)t.Assembly.CreateInstance(t.FullName);
+                    oc.Section = t.FullName.Split('.')[^2];
+                    opCodes.Add(oc);
                 }
             }
 

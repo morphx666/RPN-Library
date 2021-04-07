@@ -6,14 +6,16 @@ namespace RPNTester {
         private static readonly RPNStack rpn = new();
         private static readonly int cw1 = rpn.ColumnWidth;
         private static readonly int cw2 = cw1 - 1;
+        private static readonly int maxStack = 4;
+        private static int sectionIndex = 0;
 
         public static void Main(string[] args) {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             ClearScreen(false);
             Console.BackgroundColor = ConsoleColor.DarkBlue;
             Console.ForegroundColor = ConsoleColor.White;
-
-            int maxStack = 4;
+            //Console.BackgroundColor = ConsoleColor.Green;
+            //Console.ForegroundColor = ConsoleColor.Black;
 
             //var r = rpn.Push(rpn.InfixToRPN("X+(COS((X)))"));
             //var r = rpn.Push(rpn.InfixToRPN("( 1 + (27) ) * ( 3 / 4 ) ^ ( 5 + 6 )"));
@@ -34,6 +36,11 @@ namespace RPNTester {
 
                     if(key == ConsoleKey.Oem7) { // '
                         stringMode = !stringMode;
+                    }
+
+                    if(key == ConsoleKey.Tab) {
+                        sectionIndex++;
+                        break;
                     }
 
                     if(key == ConsoleKey.Enter) {
@@ -92,11 +99,22 @@ namespace RPNTester {
             Console.CursorVisible = cursorVisible;
         }
 
-        private static void RefreshScreen(int maxStack) {
+        private static void RefreshScreen(int stackSize) {
             Console.SetCursorPosition(0, 0);
             Console.WriteLine(rpn.ErrorFunction.PadRight(cw1));
             Console.WriteLine(rpn.ErrorMessage.PadRight(cw1));
-            rpn.PrintStack(maxStack);
+            rpn.PrintStack(stackSize);
+            int cpy = Console.CursorTop;
+
+            while(stackSize++ <= maxStack) {
+                Console.WriteLine();
+            }
+            rpn.PrintVariables();
+
+            Console.WriteLine("\n");
+            sectionIndex = rpn.PrintOpCodes(sectionIndex);
+
+            Console.SetCursorPosition(0, cpy);
         }
     }
 }

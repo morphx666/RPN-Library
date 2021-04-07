@@ -81,6 +81,52 @@ namespace RPN {
             }
         }
 
+        public void PrintVariables() {
+            for(int i = 0; i < 6; i++) {
+                Console.CursorLeft = i * 6;
+                Console.Write($"     ");
+            }
+        }
+
+        public int PrintOpCodes(int sectionIndex) { // FIXME: Arrrggghh!!! This is horrible!
+            var soc = (from oc in opCodes
+                       orderby oc.Section, oc.Symbols[0]
+                       select (Section: oc.Section, Symbol: oc.Symbols[0])).ToList();
+
+            var sectionsCount = (from s in soc select s.Section).Distinct().Count();
+
+            if(sectionIndex >= sectionsCount) sectionIndex = 0;
+            if(sectionIndex < 0) sectionIndex = sectionsCount - 1;
+
+            string lastSectionName = "";
+            int curSection = -1;
+            for(int i = 0; i < soc.Count; i++) {
+                if(soc[i].Section != lastSectionName) {
+                    lastSectionName = soc[i].Section;
+                    curSection++;
+
+                    if(curSection == sectionIndex) {
+                        Console.WriteLine($"{soc[i].Section,-20}\n");
+                    }
+                }
+
+                if(curSection == sectionIndex) {
+                    if(Console.CursorLeft + 6 > Console.WindowWidth) {
+                        Console.WriteLine("\n");
+                    }
+
+                    string n = soc[i].Symbol;
+                    int l = (6 - n.Length) / 2;
+                    Console.Write($"{"".PadLeft(l)}{n}{"".PadRight(6 - l - n.Length)}");
+                    Console.CursorLeft++;
+                }
+            }
+
+            Console.Write($"{"".PadRight(Console.WindowWidth - Console.CursorLeft)}");
+
+            return sectionIndex;
+        }
+
         public bool IsOpCode(string token) {
             bool isFunction = false;
             foreach(OpCode oc in opCodes) {
