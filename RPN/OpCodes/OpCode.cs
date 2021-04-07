@@ -80,7 +80,9 @@ namespace RPN.OpCodes {
         internal static Types InferType(string token) {
             if(token == "") {
                 return Types.Any;
-            } else { 
+            } else {
+                //string tmp = token.Replace("'", "");
+                //if(double.TryParse(tmp, out double v)) {
                 if(double.TryParse(token, out double v)) {
                     if((int)v == v) return Types.Integer;
                     return Types.Float;

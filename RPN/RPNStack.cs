@@ -22,7 +22,7 @@ namespace RPN {
 
             public StackItem(string token, Types type) {
                 if(token == null) {
-                    Token = ""; 
+                    Token = "";
                 } else {
                     switch(type) {
                         case Types.Infix:
@@ -192,6 +192,7 @@ namespace RPN {
                             ErrorMessage = "Invalid Syntax";
                         }
                     } else {
+                        //stack.Push(new StackItem(token.Replace("'", ""), dataType));
                         stack.Push(new StackItem(token, dataType));
                     }
                 }

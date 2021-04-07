@@ -3,8 +3,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
-    <AssemblyVersion>2021.4.7.540</AssemblyVersion>
-    <FileVersion>2021.4.7.540</FileVersion>
+    <AssemblyVersion>2021.4.7.543</AssemblyVersion>
+    <FileVersion>2021.4.7.543</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
