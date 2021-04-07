@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace RPN.OpCodes.Stack {
+﻿namespace RPN.OpCodes.Stack {
     [OpCodeAttr(nameof(Dup))]
     public class Dup : OpCode {
         public Dup() {

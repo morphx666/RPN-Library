@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace RPN.OpCodes.Arithmetic {
     [OpCodeAttr(nameof(Pow))]
@@ -9,7 +8,7 @@ namespace RPN.OpCodes.Arithmetic {
             Symbols = new string[] { "^" };
             DataTypes = new Types[] { Types.Number, Types.Infix };
             Associativity = Associativities.Right;
-            Precedence = 10;
+            Precedence = 5;
         }
 
         public override void ExecuteInternal(RPNStack rpn, Types dataType) {

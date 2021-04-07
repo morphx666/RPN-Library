@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace RPN.OpCodes.Stack {
+﻿namespace RPN.OpCodes.Stack {
     [OpCodeAttr(nameof(Over))]
     public class Over : OpCode {
         public Over() {

@@ -1,5 +1,4 @@
 ﻿using RPN.OpCodes.Special;
-using System.Collections.Generic;
 
 namespace RPN.OpCodes.Probability {
     [OpCodeAttr(nameof(Fact))]

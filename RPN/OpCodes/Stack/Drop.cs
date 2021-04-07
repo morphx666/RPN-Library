@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace RPN.OpCodes.Stack {
+﻿namespace RPN.OpCodes.Stack {
     [OpCodeAttr(nameof(Drop))]
     public class Drop : OpCode {
         public Drop() {

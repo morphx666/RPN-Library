@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace RPN.OpCodes.Stack {
+﻿namespace RPN.OpCodes.Stack {
     [OpCodeAttr(nameof(Clear))]
     public class Clear : OpCode {
         public Clear() {

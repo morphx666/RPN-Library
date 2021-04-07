@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace RPN.OpCodes.Arithmetic {
+﻿namespace RPN.OpCodes.Arithmetic {
     [OpCodeAttr(nameof(Div))]
     public class Div : OpCode {
         public Div() {

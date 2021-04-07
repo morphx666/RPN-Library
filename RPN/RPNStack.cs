@@ -164,55 +164,6 @@ namespace RPN {
             } else {
                 return $"'{RPNToInfix(infix)}'";
             }
-
-            //    if(!(token.Contains("(") && token.Contains(")"))) {
-            //        return token;
-            //    }
-
-            //    List<int> op = new();
-            //    List<int> cp = new();
-            //    for(int i = 0; i < token.Length; i++) {
-            //        if(token[i] == '(')
-            //            op.Add(i);
-            //        else if(token[i] == ')')
-            //            cp.Add(i);
-            //    }
-
-            //    if(op.Count != cp.Count) throw new Exception("Invalid Syntax");
-
-            //    int innerPairIndex = -1;
-            //    int len = int.MaxValue;
-            //    for(int i = 0; i < op.Count; i++) {
-            //        int cl = cp[i] - op[i];
-            //        if(cl < len) {
-            //            len = cl;
-            //            innerPairIndex = i;
-            //        }
-            //    }
-
-            //    int start = op[innerPairIndex];
-            //    int end = cp[innerPairIndex];
-            //    string subToken = token[start..end];
-
-            //    bool required = false;
-            //    foreach(OpCode oc in opCodes) {
-            //        if(oc.ArgumentCount > 0) {
-            //            foreach(string s in oc.Symbols) {
-            //                if(subToken.Contains(s)) {
-            //                    required = true;
-            //                    goto CheckRequired;
-            //                }
-            //            }
-            //        }
-            //    }
-
-            //CheckRequired:
-            //    if(!required) {
-            //        token = token[0..start] + token[(start + 1)..end] + token[(end + 1)..];
-            //        token = Simplify(token);
-            //    }
-
-            //    return token;
         }
 
         // https://codetocreate.wordpress.com/converting-an-expression-to-rpn/
@@ -364,30 +315,23 @@ namespace RPN {
                         case 2:
                             string v1 = stack.Pop();
                             string v2 = stack.Pop();
-                            switch(oc.Associativity) {
-                                case Associativities.Left:
-                                    if(ocs.Count > 0 && oc.ComparePrecedence(ocs.Peek()) > 0)
+                            if(ocs.Count > 0 && oc.ComparePrecedence(ocs.Peek()) > 0)
+                                switch(oc.Associativity) {
+                                    case Associativities.Left:
                                         arg = $"{v2}{token}({v1})";
-                                    else
-                                        arg = $"{v2}{token}{v1}";
-                                    break;
-                                case Associativities.Right:
-                                    if(ocs.Count > 0 && oc.ComparePrecedence(ocs.Peek()) > 0)
-                                        arg = $"{v1}{token}({v2})";
-                                    else
-                                        arg = $"{v1}{token}{v2}";
-                                    break;
-                            }
+                                        break;
+                                    case Associativities.Right:
+                                        arg = $"({v2}){token}{v1}"; 
+                                        break;
+                                }
+                            else
+                                arg = $"{v2}{token}{v1}";
                             break;
-                        defaut:
+                        default:
+                            Debugger.Break(); // TODO: Convert this to a function of the form
+                                              // function(a, b, c, ...)
                             break;
                     }
-
-                    //arg = "(";
-                    //for(int i = oc.ArgumentCount - 1; i >= 0; i--) {
-                    //    arg += $"{stack.Pop()}{token}";
-                    //}
-                    //arg = $"{arg[0..^1]})";
 
                     ocs.Push(oc);
                     stack.Push(arg);

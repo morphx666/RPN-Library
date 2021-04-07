@@ -1,6 +1,5 @@
 ﻿using RPN;
 using System;
-using System.Diagnostics;
 
 namespace RPNTester {
     public class Program {
@@ -18,6 +17,7 @@ namespace RPNTester {
             //var r = rpn.Push(rpn.InfixToRPN("X+(COS((X)))"));
             //var r = rpn.Push(rpn.InfixToRPN("( 1 + (27) ) * ( 3 / 4 ) ^ ( 5 + 6 )"));
             //Debugger.Break();
+            //var r = rpn.Push("'1/5^3'");
 
             while(true) {
                 RefreshScreen(maxStack);
@@ -27,6 +27,12 @@ namespace RPNTester {
                 while(true) {
                     ConsoleKeyInfo k = Console.ReadKey(true);
                     ConsoleKey key = k.Key;
+
+                    if(key == ConsoleKey.E) { // E = Eval
+                        foreach(string token in rpn.InfixToRPN(rpn.Pop()).Split(' '))
+                            rpn.Push(token);
+                        break;
+                    }
 
                     if(key == ConsoleKey.Oem7) { // '
                         stringMode = !stringMode;

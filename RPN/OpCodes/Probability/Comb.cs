@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using RPN.OpCodes.Special;
 
 namespace RPN.OpCodes.Probability {
