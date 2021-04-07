@@ -103,9 +103,12 @@ namespace RPN {
             return null;
         }
 
-        private bool ContainsOpCodes(List<string> tokens) {
+        private bool ContainsOpCodes(List<string> tokens, int minArgumentCount = 1) {
             foreach(string token in tokens) {
-                if(IsOpCode(token)) return true;
+                if(IsOpCode(token)) {
+                    if(minArgumentCount > 1) return GetOpCode(token).ArgumentCount >= minArgumentCount;
+                    return true;
+                }
             }
             return false;
         }
@@ -356,8 +359,12 @@ namespace RPN {
                         case 2:
                             string v1 = stack.Pop();
                             string v2 = stack.Pop();
-                            bool v1hoc = ContainsOpCodes(Tokenize(v1));
-                            bool v2hoc = ContainsOpCodes(Tokenize(v2));
+                            bool v1hoc = ContainsOpCodes(Tokenize(v1), 2);
+                            bool v2hoc = ContainsOpCodes(Tokenize(v2), 2);
+
+                            //if(v1hoc) v1hoc &= GetOpCode(v1).ArgumentCount > 1;
+                            //if(v2hoc) v2hoc &= GetOpCode(v2).ArgumentCount > 1;
+
                             if(ocs.Count > 0 && (oc.ComparePrecedence(ocs.Peek()) > 0 || v1hoc || v2hoc)) {
                                 if(InferType(v1) == Types.Infix && v1hoc) v1 = $"({v1})";
                                 if(InferType(v2) == Types.Infix && v2hoc) v2 = $"({v2})";

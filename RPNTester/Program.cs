@@ -20,8 +20,8 @@ namespace RPNTester {
             //var r = rpn.Push("a b + c d + / x y -");
             //var r = rpn.Push("1 a 1 + b 1 + / /");
             //var r = rpn.Push("a b + 'y+3' ^ x /");
+            //var r = rpn.Push("'1/5^3' DUP EVAL");
             //Debugger.Break();
-            //var r = rpn.Push("'1/5^3'");
 
             while(true) {
                 RefreshScreen(maxStack);
