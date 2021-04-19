@@ -111,18 +111,28 @@ namespace RPN {
                 }
 
                 if(curSection == sectionIndex) {
-                    if(Console.CursorLeft + 6 > Console.WindowWidth) {
-                        Console.WriteLine("\n");
-                    }
-
                     string n = soc[i].Symbol;
                     int l = (6 - n.Length) / 2;
                     Console.Write($"{"".PadLeft(l)}{n}{"".PadRight(6 - l - n.Length)}");
-                    Console.CursorLeft++;
+
+                    if(Console.CursorLeft >= Console.WindowWidth - 1 - 7) {
+                        if(Console.CursorTop >= Console.WindowHeight - 1) break;
+                        Console.CursorTop++;
+                        Console.CursorLeft = 0;
+                    } else {
+                        Console.CursorLeft++;
+                    }
                 }
             }
 
-            Console.Write($"{"".PadRight(Console.WindowWidth - Console.CursorLeft)}");
+            ConsoleColor bc = Console.BackgroundColor;
+            Console.BackgroundColor = ConsoleColor.Black;
+            while(Console.CursorTop < Console.WindowHeight - 1) {
+                Console.Write($"{"".PadRight(Console.WindowWidth - Console.CursorLeft)}");
+                Console.CursorLeft = 0;
+                Console.CursorTop++;
+            }
+            Console.BackgroundColor = bc;
 
             return sectionIndex;
         }
