@@ -14,7 +14,7 @@
             string v2 = rpn.Pop().Token;
 
             if((dataType & Types.Infix) == Types.Infix) {
-                rpn.Push($"({v2})*({v1})", dataType);
+                rpn.Push($"({v2}){Symbols[0]}({v1})", dataType);
             } else {
                 double d1 = double.Parse(v1);
                 double d2 = double.Parse(v2);
