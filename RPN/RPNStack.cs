@@ -106,7 +106,7 @@ namespace RPN {
                     curSection++;
 
                     if(curSection == sectionIndex) {
-                        Console.WriteLine($"{soc[i].Section,-20}\n");
+                        Console.WriteLine($"[TAB] {soc[i].Section,-20}\n");
                     }
                 }
 
@@ -138,22 +138,16 @@ namespace RPN {
         }
 
         public bool IsOpCode(string token) {
-            bool isFunction = false;
             foreach(OpCode oc in opCodes) {
-                if(oc.Symbols.Contains(token)) {
-                    isFunction = true;
-                    break;
-                }
+                if(oc.Symbols.Contains(token)) return true;
             }
 
-            return isFunction;
+            return false;
         }
 
         public OpCode GetOpCode(string token) {
             foreach(OpCode oc in opCodes) {
-                if(oc.Symbols.Contains(token)) {
-                    return oc;
-                }
+                if(oc.Symbols.Contains(token)) return oc;
             }
 
             return null;
@@ -161,8 +155,9 @@ namespace RPN {
 
         private bool ContainsOpCodes(List<string> tokens, int minArgumentCount = 1) {
             foreach(string token in tokens) {
-                if(IsOpCode(token)) {
-                    if(minArgumentCount > 1) return GetOpCode(token).ArgumentCount >= minArgumentCount;
+                OpCode oc = GetOpCode(token);
+                if(oc != null) {
+                    if(minArgumentCount > 1) return oc.ArgumentCount >= minArgumentCount;
                     return true;
                 }
             }
@@ -261,9 +256,9 @@ namespace RPN {
             token = token.Replace("'", "");
             string infix = InfixToRPN(token);
             if(infix == token) {
-                return $"{token}";
+                return token;
             } else {
-                return $"{RPNToInfix(infix)}";
+                return RPNToInfix(infix);
             }
         }
 
