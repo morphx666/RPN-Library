@@ -1,7 +1,7 @@
 ﻿namespace RPN.OpCodes.Arithmetic {
-    [OpCodeAttr(nameof(Eval))]
-    public class Eval : OpCode {
-        public Eval() {
+    [OpCodeAttr(nameof(Div))]
+    public class Div : OpCode {
+        public Div() {
             ArgumentCount = 2;
             Symbols = new string[] { "/", "÷" };
             DataTypes = new Types[] { Types.Number, Types.Infix };

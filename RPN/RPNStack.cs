@@ -359,6 +359,9 @@ namespace RPN {
             return string.Join(' ', output.ToArray());
         }
 
+        // This function has the fatal flaw that it won't recognize opcodes with symbols longer than 1 char
+        // I guess the solution would be to store each opcode as a unique byte value
+        // Similar solution to how the support for spaces was implemented in commit aec71976
         private List<string> Tokenize(string exp) {
             List<string> tokens = new();
             string v = "";
