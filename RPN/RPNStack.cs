@@ -17,7 +17,7 @@ namespace RPN {
             public string AsString() {
                 return Type switch {
                     Types.Infix => $"'{Token}'",
-                    Types.String => $"\"{Token}\"",
+                    Types.String => $"\"{Token}\"".Replace("\t", " "),
                     _ => Token,
                 };
             }
@@ -71,6 +71,18 @@ namespace RPN {
                 tmp = tmp.Length <= ColumnWidth - (idx.Length + 1) ?
                         tmp :
                         "…" + tmp[(tmp.Length - ColumnWidth + idx.Length + 2)..];
+
+                if(tmp != "" && stk[i].Type == Types.Infix) {
+                    foreach(OpCode oc in opCodes.Where(o => o.SpaceArguments)) {
+                        string s = oc.Symbols[0];
+                        if(tmp.Contains(s)) {
+                            int p = tmp.IndexOf(s);
+                            tmp = $"{tmp[0..p]} {s} {tmp[(p + s.Length)..]}";
+                            break;
+                        }
+                    }
+                }
+
                 Console.Write($"{tmp.PadLeft(ColumnWidth)}");
                 if(showTypes) {
                     if(tmp != "") tmp = stk[i].Type.ToString();
@@ -201,9 +213,34 @@ namespace RPN {
             ResetErrorState();
             if(tokens == "") return false;
 
+            // Remove spaces from infix expressions
+            string fixedTokens = "";
+            bool isInfix = false;
+            bool isString = false;
+            for(int i = 0; i < tokens.Length; i++) {
+                switch(tokens[i]) {
+                    case '\'':
+                        isInfix = !isInfix && !isString;
+                        fixedTokens += '\'';
+                        break;
+                    case '"':
+                        isString = !isString;
+                        fixedTokens += '"';
+                        break;
+                    case ' ':
+                        if(isString)
+                            fixedTokens += '\t';
+                        else if(!isInfix) fixedTokens += ' ';
+                        break;
+                    default:
+                        fixedTokens += tokens[i];
+                        break;
+                }
+            }
+
             bool isFunction = false;
-            foreach(string subToken in tokens.Split(' ')) {
-                isFunction |= ParseToken(subToken, dataType);
+            foreach(string token in fixedTokens.Split(' ')) {
+                isFunction |= ParseToken(token, dataType);
             }
             return isFunction;
         }

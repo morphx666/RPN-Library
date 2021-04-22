@@ -38,6 +38,7 @@ namespace RPN.OpCodes {
         public Types[] DataTypes { get; init; } = { Types.Any };
         public Associativities Associativity { get; init; }
         public int Precedence { get; init; } = 10;
+        public bool SpaceArguments { get; init; } = false;
         public abstract void ExecuteInternal(RPNStack rpn, Types dataType);
 
         public bool Execute(RPNStack rpn) {
