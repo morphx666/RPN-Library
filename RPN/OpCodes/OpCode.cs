@@ -39,13 +39,14 @@ namespace RPN.OpCodes {
         public Associativities Associativity { get; init; }
         public int Precedence { get; init; } = 10;
         public bool SpaceArguments { get; init; } = false;
+        public byte InternalCode { get; init; }
         public abstract void ExecuteInternal(RPNStack rpn, Types dataType);
 
         public bool Execute(RPNStack rpn) {
             try {
                 if(rpn.Count < ArgumentCount) throw new Exception($"Too Few Arguments");
 
-                int dataType = 0;
+                int majorDataType = 0; // Major? Predominant? Dominant? Broader?
                 if(ArgumentCount > 0) {
                     StackItem[] tokens = new StackItem[ArgumentCount];
                     Array.Copy(rpn.ToArray(), 0, tokens, 0, ArgumentCount);
@@ -54,20 +55,20 @@ namespace RPN.OpCodes {
                         bool canCast = false;
                         for(int j = 0; j < DataTypes.Length; j++) {
                             if((tokens[i].Type & DataTypes[j]) != 0) {
-                                dataType = Math.Max(dataType, (int)tokens[i].Type);
+                                majorDataType = Math.Max(majorDataType, (int)tokens[i].Type);
                                 canCast = true;
                             }
                         }
                         if(!canCast) {
-                            dataType = 0;
+                            majorDataType = 0;
                             break;
                         }
                     }
 
-                    if(dataType == 0) throw new Exception("Bad Argument Type");
+                    if(majorDataType == 0) throw new Exception("Bad Argument Type");
                 }
 
-                ExecuteInternal(rpn, (Types)dataType);
+                ExecuteInternal(rpn, (Types)majorDataType);
                 return true;
             } catch(Exception ex) {  // FIXME: This is kind of pointless.
                                      // We should be able to handle errors such as:

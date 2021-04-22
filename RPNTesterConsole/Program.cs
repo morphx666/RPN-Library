@@ -38,6 +38,11 @@ namespace RPNTester {
                         stringMode = !stringMode;
                     }
 
+                    if(key == ConsoleKey.RightArrow) {
+                        if(newEntry == "") rpn.Push("SWAP");
+                        break;
+                    }
+
                     if(key == ConsoleKey.Tab) {
                         sectionIndex++;
                         break;

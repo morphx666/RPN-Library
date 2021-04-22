@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPNTester", "RPNTester\RPNTester.csproj", "{80898ADF-3A4B-4071-BE88-06E9B331A0BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RPNTesterConsole", "RPNTesterConsole\RPNTesterConsole.csproj", "{80898ADF-3A4B-4071-BE88-06E9B331A0BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPN", "RPN\RPN.csproj", "{E7A1344C-7D03-4794-9E94-E218C527FC31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RPN", "RPN\RPN.csproj", "{E7A1344C-7D03-4794-9E94-E218C527FC31}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPNTesterWinForms", "RPNTesterWinForms\RPNTesterWinForms.csproj", "{FF32C011-38D2-46E3-B095-3111AB18D0D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{E7A1344C-7D03-4794-9E94-E218C527FC31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7A1344C-7D03-4794-9E94-E218C527FC31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7A1344C-7D03-4794-9E94-E218C527FC31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF32C011-38D2-46E3-B095-3111AB18D0D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF32C011-38D2-46E3-B095-3111AB18D0D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF32C011-38D2-46E3-B095-3111AB18D0D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF32C011-38D2-46E3-B095-3111AB18D0D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
