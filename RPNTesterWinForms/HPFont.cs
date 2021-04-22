@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RPNTesterWinForms {
     public class HPFont {
@@ -51,7 +45,7 @@ namespace RPNTesterWinForms {
                             ox += w;
                         }
                     }
-                } else {
+                } else { // Font Size 1 (small) is not monospace
                     int i = 0;
 
                     w = 18;
@@ -137,9 +131,9 @@ namespace RPNTesterWinForms {
             }
         }
 
-        private BmpFont[] fonts = new BmpFont[3];
+        private readonly BmpFont[] fonts = new BmpFont[3];
 
-        public HPFont() {
+        public HPFont() { // https://www.drehersoft.com/mapping-hp48-text-to-unicode/
             fonts[(int)FontSizes.Small] = new BmpFont((Bitmap)Bitmap.FromFile("Fonts/hp-font1.png"), 84, 71, 0, 0);
             fonts[(int)FontSizes.Medium] = new BmpFont((Bitmap)Bitmap.FromFile("Fonts/hp-font2.png"), 96, 78, 18, 24);
             fonts[(int)FontSizes.Large] = new BmpFont((Bitmap)Bitmap.FromFile("Fonts/hp-font3.png"), 102, 80, 18, 30);
@@ -147,6 +141,16 @@ namespace RPNTesterWinForms {
 
         public BmpChar GetChar(FontSizes fontSize, int charIndex) {
             return fonts[(int)fontSize].Chars[charIndex];
+        }
+
+        public BmpChar[] GetString(FontSizes fontSize, string text) {
+            BmpChar[] str = new BmpChar[text.Length];
+
+            for(int i = 0; i < text.Length; i++) {
+                str[i] = GetChar(fontSize, text[i]);
+            }
+
+            return str;
         }
     }
 }

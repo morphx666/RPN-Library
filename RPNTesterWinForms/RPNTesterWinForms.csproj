@@ -4,8 +4,8 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <AssemblyVersion>2021.4.22.186</AssemblyVersion>
-    <FileVersion>2021.4.22.186</FileVersion>
+    <AssemblyVersion>2021.4.22.222</AssemblyVersion>
+    <FileVersion>2021.4.22.222</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
