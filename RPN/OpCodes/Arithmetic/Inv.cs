@@ -9,7 +9,7 @@
             Precedence = 5;
         }
 
-        public override void ExecuteInternal(RPNStack rpn, Types dataType) {
+        public override bool ExecuteInternal(RPNStack rpn, Types dataType) {
             string v1 = rpn.Pop().Token;
 
             if((dataType & Types.Infix) == Types.Infix) {
@@ -18,6 +18,8 @@
                 double d1 = double.Parse(v1);
                 rpn.Push((1 / d1).ToString(), dataType);
             }
+
+            return true;
         }
     }
 }

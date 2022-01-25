@@ -13,7 +13,7 @@ namespace RPN.OpCodes.Probability {
             Precedence = 10;
         }
 
-        public override void ExecuteInternal(RPNStack rpn, Types dataType) {
+        public override bool ExecuteInternal(RPNStack rpn, Types dataType) {
             StackItem v1 = rpn.Pop();
             StackItem v2 = rpn.Pop();
 
@@ -29,6 +29,8 @@ namespace RPN.OpCodes.Probability {
                 }
                 rpn.Push((SpecialFunctions.Fact(d2) / SpecialFunctions.Fact(d2 - d1)).ToString(), dataType);
             }
+
+            return true;
         }
     }
 }

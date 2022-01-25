@@ -8,7 +8,7 @@ namespace RPN.OpCodes.Stack {
             Symbols = new string[] { nameof(DropN).ToUpper() };
         }
 
-        public override void ExecuteInternal(RPNStack rpn, Types dataType) {
+        public override bool ExecuteInternal(RPNStack rpn, Types dataType) {
             int i1 = int.Parse(rpn.Pop().Token);
 
             if(rpn.Count < i1) {
@@ -16,6 +16,8 @@ namespace RPN.OpCodes.Stack {
                 throw new ArgumentException("Too few arguments");
             }
             while(--i1 >= 0) rpn.Pop();
+
+            return true;
         }
     }
 }

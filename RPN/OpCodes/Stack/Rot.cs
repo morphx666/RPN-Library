@@ -8,12 +8,14 @@ namespace RPN.OpCodes.Stack {
             Symbols = new string[] { nameof(Rot).ToUpper() };
         }
 
-        public override void ExecuteInternal(RPNStack rpn, Types dataType) {
+        public override bool ExecuteInternal(RPNStack rpn, Types dataType) {
             StackItem[] stk = new StackItem[rpn.Count];
             rpn.CopyTo(stk);
             rpn.Clear();
             for(int i = stk.Length - 2; i >= 0; i--) rpn.Push(stk[i]);
             rpn.Push(stk[^1]);
+
+            return true;
         }
     }
 }

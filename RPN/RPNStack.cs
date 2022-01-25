@@ -43,6 +43,18 @@ namespace RPN {
             }
         }
 
+        public class Variable {
+            public string Name { get; set; }
+            public string Value { get; set; }
+            public Types Type { get; set; }
+
+            public Variable(string name, string value, Types type) {
+                Name = name;
+                Value = value;
+                Type = type;
+            }
+        }
+
         public int ColumnWidth { get; init; }
 
         public string ErrorFunction { get; internal set; } = "";
@@ -51,6 +63,7 @@ namespace RPN {
         private readonly Stack<StackItem> stack;
         private readonly List<OpCode> opCodes;
         private readonly bool SimplifyTokens;
+        public readonly List<Variable> Vars = new();
 
         public RPNStack(int columnWidth = 22, bool simplifyTokens = true) {
             stack = new();
@@ -96,7 +109,13 @@ namespace RPN {
         public void PrintVariables() {
             for(int i = 0; i < 6; i++) {
                 Console.CursorLeft = i * 6;
-                Console.Write($"     ");
+                if(i < Vars.Count) {
+                    string n = Vars[i].Name.Length <= 5 ? Vars[i].Name : Vars[i].Name[..5];
+                    int l = (5 - n.Length) / 2;
+                    Console.Write($"{"".PadLeft(l)}{n}{"".PadRight(5 - l - n.Length)}");
+                } else {
+                    Console.Write("     ");
+                }
             }
         }
 
@@ -123,9 +142,9 @@ namespace RPN {
                 }
 
                 if(curSection == sectionIndex) {
-                    string n = soc[i].Symbol;
-                    int l = (6 - n.Length) / 2;
-                    Console.Write($"{"".PadLeft(l)}{n}{"".PadRight(6 - l - n.Length)}");
+                    string n = soc[i].Symbol.Length <= 5 ? soc[i].Symbol : soc[i].Symbol[..5];
+                    int l = (5 - n.Length) / 2;
+                    Console.Write($"{"".PadLeft(l)}{n}{"".PadRight(5 - l - n.Length)}");
 
                     if(Console.CursorLeft >= Console.WindowWidth - 1 - 7) {
                         if(Console.CursorTop >= Console.WindowHeight - 1) break;

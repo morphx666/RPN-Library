@@ -9,17 +9,20 @@
             Precedence = 5;
         }
 
-        public override void ExecuteInternal(RPNStack rpn, Types dataType) {
+        public override bool ExecuteInternal(RPNStack rpn, Types dataType) {
             string v1 = rpn.Pop().Token;
 
             if(rpn.Count == 0) {
                 ErrorFunction = "EVAL";
                 ErrorMessage = "Too Few Arguments";
+                return false;
             }
 
             foreach(string token in rpn.InfixToRPN(v1).Split(' ')) {
                 rpn.Push(token);
             }
+
+            return true;
         }
     }
 }

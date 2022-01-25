@@ -6,8 +6,10 @@
             Symbols = new string[] { nameof(Drop).ToUpper() };
         }
 
-        public override void ExecuteInternal(RPNStack rpn, Types dataType) {
+        public override bool ExecuteInternal(RPNStack rpn, Types dataType) {
             rpn.Pop();
+
+            return true;
         }
     }
 }

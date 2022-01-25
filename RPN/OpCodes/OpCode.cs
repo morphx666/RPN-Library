@@ -40,7 +40,7 @@ namespace RPN.OpCodes {
         public int Precedence { get; init; } = 10;
         public bool SpaceArguments { get; init; } = false;
         public byte InternalCode { get; init; }
-        public abstract void ExecuteInternal(RPNStack rpn, Types dataType);
+        public abstract bool ExecuteInternal(RPNStack rpn, Types dataType);
 
         public bool Execute(RPNStack rpn) {
             try {
@@ -68,8 +68,7 @@ namespace RPN.OpCodes {
                     if(majorDataType == 0) throw new Exception("Bad Argument Type");
                 }
 
-                ExecuteInternal(rpn, (Types)majorDataType);
-                return true;
+                return ExecuteInternal(rpn, (Types)majorDataType);                
             } catch(Exception ex) {  // FIXME: This is kind of pointless.
                                      // We should be able to handle errors such as:
                                      // - To few arguments (already implemented)

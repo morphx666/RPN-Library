@@ -9,12 +9,14 @@ namespace RPN.OpCodes.Stack {
             Symbols = new string[] { nameof(Pick).ToUpper() };
         }
 
-        public override void ExecuteInternal(RPNStack rpn, Types dataType) {
+        public override bool ExecuteInternal(RPNStack rpn, Types dataType) {
             int i1 = int.Parse(rpn.Pop().Token);
             if(i1 > rpn.Count) throw new Exception("Too Few Arguments");
             StackItem[] stk = new StackItem[rpn.Count];
             rpn.CopyTo(stk);
             rpn.Push(stk[i1 - 1]);
+
+            return true;
         }
     }
 }

@@ -10,7 +10,7 @@
             SpaceArguments = true;
         }
 
-        public override void ExecuteInternal(RPNStack rpn, Types dataType) {
+        public override bool ExecuteInternal(RPNStack rpn, Types dataType) {
             string v1 = rpn.Pop().Token;
             string v2 = rpn.Pop().Token;
 
@@ -25,6 +25,8 @@
                 int d2 = (int)double.Parse(v2);
                 rpn.Push(d2 != 0 ^ d1 != 0 ? "1" : "0", dataType);
             }
+
+            return true;
         }
     }
 }

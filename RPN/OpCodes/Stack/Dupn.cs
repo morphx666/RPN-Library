@@ -9,7 +9,7 @@ namespace RPN.OpCodes.Stack {
             Symbols = new string[] { nameof(DupN).ToUpper() };
         }
 
-        public override void ExecuteInternal(RPNStack rpn, Types dataType) {
+        public override bool ExecuteInternal(RPNStack rpn, Types dataType) {
             int i1 = int.Parse(rpn.Pop().Token);
 
             if(rpn.Count < i1) {
@@ -19,6 +19,8 @@ namespace RPN.OpCodes.Stack {
             StackItem[] stk = new StackItem[i1];
             Array.Copy(rpn.ToArray(), rpn.Count - i1, stk, 0, i1);
             while(--i1 >= 0) rpn.Push(stk[i1]);
+
+            return true;
         }
     }
 }

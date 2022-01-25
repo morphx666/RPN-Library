@@ -7,9 +7,6 @@ namespace RPNTesterWinForms {
 
     public partial class FormMain : Form {
         public int PixelSize { get; set; } = 2;
-        public FontSizes FontSize { get; set; } = FontSizes.Small;
-
-        private readonly HPFont hpf = new();
 
         public FormMain() {
             InitializeComponent();
@@ -19,28 +16,45 @@ namespace RPNTesterWinForms {
                           ControlStyles.OptimizedDoubleBuffer |
                           ControlStyles.ResizeRedraw, true);
 
+            HPFont f = new();
+
             // Testing HP bitmap fonts
             this.Paint += (object s, PaintEventArgs e) => {
                 Graphics g = e.Graphics;
 
-                PrintAllChars(g);
-                PrintText(g, "Hello World!", Color.Black, Color.White, 10, 10);
+                g.Clear(Color.White);
+
+                //PrintAllChars(g, f);
+                PrintText(g, "Hello World!", f, FontSizes.Small, Color.Black, Color.White, 10, 10);
+                PrintText(g, "Hello World!", f, FontSizes.Medium, Color.Black, Color.White, 10, PixelSize * f.FontHeight(FontSizes.Small) + 10);
+                PrintText(g, "Hello World!", f, FontSizes.Large, Color.Black, Color.White, 10, PixelSize * (f.FontHeight(FontSizes.Small) + f.FontHeight(FontSizes.Medium)) + 10 * 2, 100);
             };
         }
 
-        private void PrintText(Graphics g, string text, Color fg, Color bg, int x, int y) {
-            g.Clear(Color.White);
+        private void PrintText(Graphics g, string text, HPFont f, FontSizes fs, Color fg, Color bg, int x, int y, int w = -1, int h = -1) {
+            BmpChar[] bcs = f.GetString(fs, text);
 
-            BmpChar[] bcs = hpf.GetString(FontSize, text);
+            int ox = x;
+            int oy = y;
 
             for(int i = 0; i < bcs.Length; i++) {
-                PrintChar(g, bcs[i], fg, bg, x, y);
-                x += bcs[i].Width * PixelSize - PixelSize;
+                PrintChar(g, bcs[i], fg, bg, ox, oy);
+                ox += bcs[i].Width * PixelSize - PixelSize;
+
+                if(w != -1 && ox >= w) {
+                    ox = x;
+                    oy += PixelSize * f.FontHeight(fs);
+                }
+
+                if(h != -1 && oy >= h) {
+                    oy = y;
+                    ox = x;
+                }
             }
 
         }
 
-        private void PrintAllChars(Graphics g) {
+        private void PrintAllChars(Graphics g, HPFont f) {
             g.Clear(Color.White);
 
             int xo = 0;
@@ -48,7 +62,7 @@ namespace RPNTesterWinForms {
             int ps = 3;
 
             for(int i = 0; i < 256; i++) {
-                BmpChar bc = hpf.GetChar(FontSize, i);
+                BmpChar bc = f.GetChar(FontSizes.Small, i);
 
                 PrintChar(g, bc, Color.Black, Color.LightGray, xo, yo);
 

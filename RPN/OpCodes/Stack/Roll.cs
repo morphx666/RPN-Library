@@ -9,7 +9,7 @@ namespace RPN.OpCodes.Stack {
             Symbols = new string[] { nameof(Roll).ToUpper() };
         }
 
-        public override void ExecuteInternal(RPNStack rpn, Types dataType) {
+        public override bool ExecuteInternal(RPNStack rpn, Types dataType) {
             int i1 = int.Parse(rpn.Pop().Token);
 
             if(i1 > rpn.Count) throw new Exception("Too Few Arguments");
@@ -20,6 +20,8 @@ namespace RPN.OpCodes.Stack {
                 if((i1 - 1) != i) rpn.Push(stk[i]);
             }
             rpn.Push(stk[i1 - 1]);
+
+            return true;
         }
     }
 }

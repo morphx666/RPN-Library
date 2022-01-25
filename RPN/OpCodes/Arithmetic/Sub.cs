@@ -9,7 +9,7 @@
             Precedence = 0;
         }
 
-        public override void ExecuteInternal(RPNStack rpn, Types dataType) {
+        public override bool ExecuteInternal(RPNStack rpn, Types dataType) {
             string v1 = rpn.Pop().Token;
             string v2 = rpn.Pop().Token;
 
@@ -20,6 +20,8 @@
                 double d2 = double.Parse(v2);
                 rpn.Push((d2 - d1).ToString(), dataType);
             }
+
+            return true;
         }
     }
 }

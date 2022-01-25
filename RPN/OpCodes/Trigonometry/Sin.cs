@@ -11,7 +11,7 @@ namespace RPN.OpCodes.Trigonometry {
             Precedence = 10;
         }
 
-        public override void ExecuteInternal(RPNStack rpn, Types dataType) {
+        public override bool ExecuteInternal(RPNStack rpn, Types dataType) {
             string v1 = rpn.Pop().Token;
 
             if((dataType & Types.Infix) == Types.Infix) {
@@ -20,6 +20,8 @@ namespace RPN.OpCodes.Trigonometry {
                 double d1 = double.Parse(v1);
                 rpn.Push(Math.Sin(d1).ToString(), dataType);
             }
+
+            return true;
         }
     }
 }

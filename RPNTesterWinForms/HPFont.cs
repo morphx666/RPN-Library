@@ -152,5 +152,13 @@ namespace RPNTesterWinForms {
 
             return str;
         }
+
+        public int FontWidth(FontSizes fontSize) {
+            return fonts[(int)fontSize].Chars[0].Width;
+        }
+
+        public int FontHeight(FontSizes fontSize) {
+            return fonts[(int)fontSize].Chars[0].Height;
+        }
     }
 }
