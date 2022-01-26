@@ -10,6 +10,7 @@ namespace RPNTester {
         private static int sectionIndex = 0;
 
         public static void Main(string[] args) {
+            Console.Title = "RPN Library Tester";
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             ClearScreen(false);
             Console.BackgroundColor = ConsoleColor.DarkBlue;

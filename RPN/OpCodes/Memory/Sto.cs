@@ -17,7 +17,7 @@ namespace RPN.OpCodes.Memory {
             string v2 = rpn.Pop().Token;
             Types type = OpCode.InferType(v2);
 
-            rpn.Vars.Add(new RPNStack.Variable(v1, v2, type));
+            rpn.Variables.Add(new RPNStack.Variable(v1, v2, type));
 
             return true;
         }

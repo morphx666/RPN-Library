@@ -63,7 +63,7 @@ namespace RPN {
         private readonly Stack<StackItem> stack;
         private readonly List<OpCode> opCodes;
         private readonly bool SimplifyTokens;
-        public readonly List<Variable> Vars = new();
+        public readonly List<Variable> Variables = new();
 
         public RPNStack(int columnWidth = 22, bool simplifyTokens = true) {
             stack = new();
@@ -109,8 +109,8 @@ namespace RPN {
         public void PrintVariables() {
             for(int i = 0; i < 6; i++) {
                 Console.CursorLeft = i * 6;
-                if(i < Vars.Count) {
-                    string n = Vars[i].Name.Length <= 5 ? Vars[i].Name : Vars[i].Name[..5];
+                if(i < Variables.Count) {
+                    string n = Variables[i].Name.Length <= 5 ? Variables[i].Name : Variables[i].Name[..5];
                     int l = (5 - n.Length) / 2;
                     Console.Write($"{"".PadLeft(l)}{n}{"".PadRight(5 - l - n.Length)}");
                 } else {
@@ -228,7 +228,7 @@ namespace RPN {
             return Push(item.Token, item.Type);
         }
 
-        public bool Push(string tokens, Types dataType = Types.Any) {
+        public bool Push(string tokens, Types dataType = Types.Any, bool expand = false) {
             ResetErrorState();
             if(tokens == "") return false;
 
@@ -259,12 +259,13 @@ namespace RPN {
 
             bool isFunction = false;
             foreach(string token in fixedTokens.Split(' ')) {
-                isFunction |= ParseToken(token, dataType);
+                isFunction |= ParseToken(token, dataType, expand);
             }
+
             return isFunction;
         }
 
-        private bool ParseToken(string token, Types dataType = Types.Any) {
+        private bool ParseToken(string token, Types dataType = Types.Any, bool expand = false) {
             bool isOpCode = false;
             bool hasErrors = false;
 
@@ -289,6 +290,13 @@ namespace RPN {
                     if(dataType == Types.Any) dataType = InferType(token);
                     if(dataType == Types.Infix) {
                         try {
+                            foreach(Variable v in Variables) {
+                                if(v.Name == token) {
+                                    stack.Push(new StackItem(v.Value, v.Type));
+                                    return false;
+                                }
+                            }
+
                             stack.Push(new StackItem(Simplify(token), Types.Infix));
                         } catch {
                             ErrorFunction = "";

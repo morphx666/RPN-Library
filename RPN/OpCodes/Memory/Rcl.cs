@@ -16,7 +16,7 @@ namespace RPN.OpCodes.Memory {
             string v1 = rpn.Pop().Token;
             Types type = OpCode.InferType(v1);
 
-            foreach(var v in rpn.Vars) {
+            foreach(RPNStack.Variable v in rpn.Variables) {
                 if(v.Name == v1) {
                     rpn.Push(v.Value, v.Type);
                     return true;
