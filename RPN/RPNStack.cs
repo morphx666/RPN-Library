@@ -9,6 +9,11 @@ using static RPN.OpCodes.OpCode;
 
 namespace RPN {
     public class RPNStack {
+        private readonly Stack<StackItem> stack;
+        private readonly List<OpCode> opCodes;
+        private readonly List<Variable> variables;
+        private readonly bool simplifyTokens;
+
         public record StackItem {
             public string Token { get; init; }
             public Types Type { get; init; }
@@ -55,21 +60,29 @@ namespace RPN {
             }
         }
 
+        public List<Variable> Variables {
+            get => variables;
+        }
+
         public int ColumnWidth { get; init; }
+
+        public Stack<StackItem> Stack {
+            get => stack;
+        }
+
+        public List<OpCode> OpCodes {
+            get => opCodes;
+        }
 
         public string ErrorFunction { get; internal set; } = "";
         public string ErrorMessage { get; internal set; } = "";
 
-        private readonly Stack<StackItem> stack;
-        private readonly List<OpCode> opCodes;
-        private readonly bool SimplifyTokens;
-        public readonly List<Variable> Variables = new();
-
         public RPNStack(int columnWidth = 22, bool simplifyTokens = true) {
             stack = new();
-            ColumnWidth = columnWidth;
             opCodes = GetAvailableOpCodes();
-            SimplifyTokens = simplifyTokens;
+            variables = new();
+            ColumnWidth = columnWidth;
+            this.simplifyTokens = simplifyTokens;
         }
 
         public void PrintStack(int max = 4, bool showTypes = false) {
@@ -109,8 +122,8 @@ namespace RPN {
         public void PrintVariables() {
             for(int i = 0; i < 6; i++) {
                 Console.CursorLeft = i * 6;
-                if(i < Variables.Count) {
-                    string n = Variables[i].Name.Length <= 5 ? Variables[i].Name : Variables[i].Name[..5];
+                if(i < variables.Count) {
+                    string n = variables[i].Name.Length <= 5 ? variables[i].Name : variables[i].Name[..5];
                     int l = (5 - n.Length) / 2;
                     Console.Write($"{"".PadLeft(l)}{n}{"".PadRight(5 - l - n.Length)}");
                 } else {
@@ -290,7 +303,7 @@ namespace RPN {
                     if(dataType == Types.Any) dataType = InferType(token);
                     if(dataType == Types.Infix) {
                         try {
-                            foreach(Variable v in Variables) {
+                            foreach(Variable v in variables) {
                                 if(v.Name == token) {
                                     stack.Push(new StackItem(v.Value, v.Type));
                                     return false;
@@ -315,7 +328,7 @@ namespace RPN {
         }
 
         private string Simplify(string token) {
-            if(!SimplifyTokens) return token;
+            if(!simplifyTokens) return token;
 
             token = token.Replace("'", "");
             string infix = InfixToRPN(token);

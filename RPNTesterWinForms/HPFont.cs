@@ -157,6 +157,15 @@ namespace RPNTesterWinForms {
             return fonts[(int)fontSize].Chars[0].Width;
         }
 
+        public int FontSmallWidth(string text) {
+            int w = 0;
+            BmpChar[] bcs = GetString(FontSizes.Small, text);
+            for(int i = 0; i < bcs.Length; i++) {
+                w += bcs[i].Width;
+            }
+            return w;
+        }
+
         public int FontHeight(FontSizes fontSize) {
             return fonts[(int)fontSize].Chars[0].Height;
         }

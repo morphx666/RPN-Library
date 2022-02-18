@@ -17,6 +17,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RPN\RPN.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Fonts\hp-font1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
