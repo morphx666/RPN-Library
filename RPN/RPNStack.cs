@@ -132,44 +132,52 @@ namespace RPN {
             }
         }
 
-        public int PrintOpCodes(int sectionIndex) { // FIXME: Arrrggghh!!! This is horrible!
-            var soc = (from oc in opCodes
-                       orderby oc.Section, oc.Symbols[0]
-                       select (Section: oc.Section, Symbol: oc.Symbols[0])).ToList();
+        public (int, int, string) PrintOpCodes(int sectionIndex, int opCodeIndex) {
+            ConsoleColor bc = Console.BackgroundColor;
 
-            var sectionsCount = (from s in soc select s.Section).Distinct().Count();
-
+            string selectedOpCode = "";
+            int sectionsCount = (from oc in opCodes select oc.Section).Distinct().Count();
             if(sectionIndex >= sectionsCount) sectionIndex = 0;
             if(sectionIndex < 0) sectionIndex = sectionsCount - 1;
 
-            string lastSectionName = "";
-            int curSection = -1;
-            for(int i = 0; i < soc.Count; i++) {
-                if(soc[i].Section != lastSectionName) {
-                    lastSectionName = soc[i].Section;
-                    curSection++;
+            string sectionName = (from oc in opCodes
+                                  orderby oc.Section
+                                  select oc.Section)
+                                  .Distinct()
+                                  .ToArray()[sectionIndex];
 
-                    if(curSection == sectionIndex) {
-                        Console.WriteLine($"[TAB] {soc[i].Section,-20}\n");
-                    }
+            var socs = (from oc in opCodes
+                           where oc.Section == sectionName
+                           orderby oc.Symbols[0]
+                           select oc.Symbols[0]).ToList();
+
+            if(opCodeIndex >= socs.Count) opCodeIndex = 0;
+            if(opCodeIndex < 0) opCodeIndex = socs.Count - 1;
+
+            Console.BackgroundColor = ConsoleColor.Blue;
+            Console.WriteLine($"{sectionName,-35}\n");
+
+            for(int i = 0; i < socs.Count; i++) {
+               string n = socs[i].Length <= 5 ? socs[i] : socs[i][..5];
+                int l = (5 - n.Length) / 2;
+
+                if(i == opCodeIndex) {
+                    Console.BackgroundColor = ConsoleColor.Blue;
+                    selectedOpCode = socs[i];
+                } else {
+                    Console.BackgroundColor = bc;
                 }
+                Console.Write($"{"".PadLeft(l)}{n}{"".PadRight(5 - l - n.Length)}");
 
-                if(curSection == sectionIndex) {
-                    string n = soc[i].Symbol.Length <= 5 ? soc[i].Symbol : soc[i].Symbol[..5];
-                    int l = (5 - n.Length) / 2;
-                    Console.Write($"{"".PadLeft(l)}{n}{"".PadRight(5 - l - n.Length)}");
-
-                    if(Console.CursorLeft >= Console.WindowWidth - 1 - 7) {
-                        if(Console.CursorTop >= Console.WindowHeight - 1) break;
-                        Console.CursorTop++;
-                        Console.CursorLeft = 0;
-                    } else {
-                        Console.CursorLeft++;
-                    }
+                if(Console.CursorLeft >= Console.WindowWidth - 1 - 7) {
+                    if(Console.CursorTop >= Console.WindowHeight - 1) break;
+                    Console.CursorTop++;
+                    Console.CursorLeft = 0;
+                } else {
+                    Console.CursorLeft++;
                 }
             }
 
-            ConsoleColor bc = Console.BackgroundColor;
             Console.BackgroundColor = ConsoleColor.Black;
             while(Console.CursorTop < Console.WindowHeight - 1) {
                 Console.Write($"{"".PadRight(Console.WindowWidth - Console.CursorLeft)}");
@@ -178,7 +186,7 @@ namespace RPN {
             }
             Console.BackgroundColor = bc;
 
-            return sectionIndex;
+            return (sectionIndex, opCodeIndex, selectedOpCode);
         }
 
         public bool IsOpCode(string token) {

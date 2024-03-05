@@ -1,7 +1,6 @@
 ﻿using RPN;
 using RPN.OpCodes;
 using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -15,7 +14,7 @@ namespace RPNTesterWinForms {
         private readonly RPNStack rpn = new();
         private readonly HPFont hpf = new();
         private readonly Color hpGreen = Color.FromArgb(155, 177, 164);
-        private int PixelSize = 4;
+        private int PixelSize = 2;
         private int w;
         private int h;
 
@@ -187,6 +186,8 @@ namespace RPNTesterWinForms {
             // Max width for Medium: 22 chars
             // Max width for Small: 33 chars
             w = 22 * hpf.FontWidth(FontSizes.Medium) * PixelSize;
+
+            // Max height for Medium: 6 chars + 1 row of Small
             h = (6 * hpf.FontHeight(FontSizes.Medium) + hpf.FontHeight(FontSizes.Small)) * PixelSize;
 
             this.ClientSize = new Size(w, h);

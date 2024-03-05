@@ -2,10 +2,10 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <AssemblyVersion>2022.1.25.243</AssemblyVersion>
-    <FileVersion>2022.1.25.243</FileVersion>
+    <AssemblyVersion>2024.3.5.252</AssemblyVersion>
+    <FileVersion>2024.3.5.252</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

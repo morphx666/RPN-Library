@@ -1,12 +1,9 @@
-﻿using RPN.OpCodes.Logic;
-using System.Collections.Generic;
-
-namespace RPN.OpCodes.Memory {
+﻿namespace RPN.OpCodes.Memory {
     [OpCodeAttr(nameof(Rcl))]
     internal class Rcl : OpCode {
         public Rcl() {
             ArgumentCount = 1;
-            Symbols = new string[] { "RCL" };
+            Symbols = new string[] { nameof(Rcl).ToUpper() };
             DataTypes = new Types[] { Types.Infix };
             Associativity = Associativities.Left;
             Precedence = 5;

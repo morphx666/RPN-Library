@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-    <AssemblyVersion>2022.1.25.665</AssemblyVersion>
-    <FileVersion>2022.1.25.665</FileVersion>
+    <TargetFramework>net7.0</TargetFramework>
+    <AssemblyVersion>2024.3.5.743</AssemblyVersion>
+    <FileVersion>2024.3.5.743</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

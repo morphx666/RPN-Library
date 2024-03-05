@@ -1,12 +1,9 @@
-﻿using RPN.OpCodes.Logic;
-using System.Collections.Generic;
-
-namespace RPN.OpCodes.Memory {
+﻿namespace RPN.OpCodes.Memory {
     [OpCodeAttr(nameof(Sto))]
     internal class Sto : OpCode {
         public Sto() {
             ArgumentCount = 2;
-            Symbols = new string[] { "STO" };
+            Symbols = new string[] { nameof(Sto).ToUpper() };
             DataTypes = new Types[] { Types.Infix, Types.Any };
             Associativity = Associativities.Left;
             Precedence = 5;

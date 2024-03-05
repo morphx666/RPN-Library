@@ -3,7 +3,7 @@
     public class Eval : OpCode {
         public Eval() {
             ArgumentCount = 1;
-            Symbols = new string[] { "EVAL" };
+            Symbols = new string[] { nameof(Eval).ToUpper() };
             DataTypes = new Types[] { Types.Number, Types.Infix };
             Associativity = Associativities.Left;
             Precedence = 5;

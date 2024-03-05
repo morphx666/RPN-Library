@@ -8,15 +8,14 @@ namespace RPNTester {
         private static readonly int cw2 = cw1 - 1;
         private static readonly int maxStack = 4;
         private static int sectionIndex = 0;
+        private static int opCodeIndex = 0;
+        private static string selectedOpCode = "";
 
         public static void Main(string[] args) {
             Console.Title = "RPN Library Tester";
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             ClearScreen(false);
-            Console.BackgroundColor = ConsoleColor.DarkBlue;
-            Console.ForegroundColor = ConsoleColor.White;
-            //Console.BackgroundColor = ConsoleColor.Green;
-            //Console.ForegroundColor = ConsoleColor.Black;
+            ResetColors();
 
             //var r = rpn.Push(rpn.InfixToRPN("X+(COS((X)))"));
             //var r = rpn.Push(rpn.InfixToRPN("( 1 + (27) ) * ( 3 / 4 ) ^ ( 5 + 6 )"));
@@ -44,16 +43,33 @@ namespace RPNTester {
                         break;
                     }
 
-                    if(key == ConsoleKey.Tab) {
+                    if(key == ConsoleKey.PageUp) {
+                        opCodeIndex = 0;
+                        sectionIndex--;
+                        break;
+                    }
+
+                    if(key == ConsoleKey.PageDown) {
+                        opCodeIndex = 0;
                         sectionIndex++;
                         break;
                     }
 
+                    if(key == ConsoleKey.Tab) {
+                        opCodeIndex += (k.Modifiers == ConsoleModifiers.Shift) ? -1 : 1;
+                        break;
+                    }
+
                     if(key == ConsoleKey.Enter) {
-                        if(newEntry == "") {
-                            rpn.Push("DUP");
+                        if(k.Modifiers == ConsoleModifiers.Control) {
+                            if(newEntry != "") rpn.Push(newEntry);
+                            rpn.Push(selectedOpCode);
                         } else {
-                            rpn.Push(newEntry);
+                            if(newEntry == "") {
+                                rpn.Push("DUP");
+                            } else {
+                                rpn.Push(newEntry);
+                            }
                         }
                         break;
                     }
@@ -118,9 +134,29 @@ namespace RPNTester {
             rpn.PrintVariables();
 
             Console.WriteLine("\n");
-            sectionIndex = rpn.PrintOpCodes(sectionIndex);
+            (sectionIndex, opCodeIndex, selectedOpCode) = rpn.PrintOpCodes(sectionIndex, opCodeIndex);
+
+            PrintHelp();
 
             Console.SetCursorPosition(0, cpy);
+        }
+
+        private static void PrintHelp() {
+            string pushInfo = $"Ctrl+Enter:    Push Selected OpCode [{selectedOpCode}]";
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.CursorTop -= 2;
+            Console.Write("PageUp/PageDn: Select Section\n");
+            Console.Write("Tab:           Select OpCode\n");
+            Console.Write($"{pushInfo,-60}");
+            ResetColors();
+        }
+
+        private static void ResetColors() {
+            Console.BackgroundColor = ConsoleColor.DarkBlue;
+            Console.ForegroundColor = ConsoleColor.White;
+            //Console.BackgroundColor = ConsoleColor.Green;
+            //Console.ForegroundColor = ConsoleColor.Black;
         }
     }
 }

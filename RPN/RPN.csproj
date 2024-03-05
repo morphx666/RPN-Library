@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <AssemblyVersion>2022.1.25.471</AssemblyVersion>
-    <FileVersion>2022.1.25.471</FileVersion>
+    <TargetFramework>net7.0</TargetFramework>
+    <AssemblyVersion>2024.3.5.521</AssemblyVersion>
+    <FileVersion>2024.3.5.521</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

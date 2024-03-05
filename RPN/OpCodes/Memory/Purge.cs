@@ -1,12 +1,9 @@
-﻿using RPN.OpCodes.Logic;
-using System.Collections.Generic;
-
-namespace RPN.OpCodes.Memory {
+﻿namespace RPN.OpCodes.Memory {
     [OpCodeAttr(nameof(Purge))]
     internal class Purge : OpCode {
         public Purge() {
             ArgumentCount = 1;
-            Symbols = new string[] { "PURGE" };
+            Symbols = new string[] { nameof(Purge).ToUpper() };
             DataTypes = new Types[] { Types.Infix };
             Associativity = Associativities.Left;
             Precedence = 5;
