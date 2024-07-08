@@ -17,7 +17,7 @@ namespace RPN {
         public record StackItem {
             public string Token { get; init; }
             public Types Type { get; init; }
-            public bool HasDelimeters { get; init; }
+            public bool HasDelimiters { get; init; }
 
             public string AsString() {
                 return Type switch {
@@ -44,7 +44,7 @@ namespace RPN {
                     }
                 }
                 Type = type;
-                HasDelimeters = type == Types.Infix || type == Types.String;
+                HasDelimiters = type == Types.Infix || type == Types.String;
             }
         }
 
